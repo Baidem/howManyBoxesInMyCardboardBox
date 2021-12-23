@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>How many boxes in my cardboard box?</title>
+    <!-- <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css"> -->
+    <link href="styles/style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="scripts/mainObjet.js" defer></script><!-- attribut : defer pour exécuter le script après que la page soit chargée. -->
+    <script src="jquery-3.6.0.js"></script>
+  </head>
+  <body>
+    <header>
+      <span>
+        <svg width="24" height="24" stroke-width="1" stroke="#808080" fill="none" stroke-linejoin="arcs" stroke-linecap="square" viewBox="0 0 24 24"> <g fill="none" fill-rule="evenodd"><rect width="24" height="24" style="stroke:rgba(0,0,0,0)"/><path d="M2,22 L22,22 L22,2 L2,2 L2,22 Z M12,22 L12,2 L12,22 Z M2.5,12 L21.5,12 L2.5,12 Z M8.667,12 C7.746,12 7,11.254 7,10.333 C7,9.413 7.746,8.666 8.667,8.666 C9.587,8.666 10.139,9 10.75,9.916 C10.984,10.269 12,12 12,12 L8.667,12 Z M12,12 C12,12 13.016,10.269 13.25,9.916 C13.861,9 14.413,8.666 15.333,8.666 C16.254,8.666 17,9.413 17,10.333 C17,11.254 16.254,12 15.333,12 L12,12 Z M7.417,15.333 C7.417,15.333 9.083,12 12,12 C14.917,12 16.583,15.333 16.583,15.333" stroke="#808080"/></g></svg>
+
+        <h1>How many boxes in my cardboard?</h1>
+        
+        <svg width="24" height="24" stroke-width="1" stroke="#808080" fill="none" stroke-linejoin="arcs" stroke-linecap="square" viewBox="0 0 24 24"> <g fill="none" fill-rule="evenodd"><rect width="24" height="24" style="stroke:rgba(0,0,0,0)"></rect><path d="M16,14 C17.1045695,14 18,13.1045695 18,12 C18,10.8954305 17.1045695,10 16,10 C14.8954305,10 14,10.8954305 14,12 C14,13.1045695 14.8954305,14 16,14 Z M22,12 L18,12 M14,12 L2,12 M4,17 C5.1045695,17 6,17.8954305 6,19 C6,20.1045695 5.1045695,21 4,21 C2.8954305,21 2,20.1045695 2,19 C2,17.8954305 2.8954305,17 4,17 Z M4,3 C5.1045695,3 6,3.8954305 6,5 C6,6.1045695 5.1045695,7 4,7 C2.8954305,7 2,6.1045695 2,5 C2,3.8954305 2.8954305,3 4,3 Z M6,5 L22,5 M6,19 L22,19"></path></g></svg>
+      </span>
+
+    </header>
+    <div id="input_dimensions">
+      <table>
+        <thead>
+            <tr>
+                <th colspan="3">Dimensions of the cardboard box</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="input_name">inner width  (x)</td>
+                <td class="input_name">inner length (y)</td>
+                <td class="input_name">inner height (z)</td>
+            </tr>
+            <tr>
+              <td class="input_dim" ><input id="inner_x" type="number" value=388></td>
+              <td class="input_dim" ><input id="inner_y" type="number" value=588></td>
+              <td class="input_dim" ><input id="inner_z" type="number" value=282></td>
+          </tr>
+        </tbody>
+        </table>
+
+        <table>
+          <thead>
+              <tr>
+                  <th colspan="3">Dimensions of a box</th>
+              </tr>
+          </thead>
+        <tbody>
+          <tr>
+              <td class="input_name">side width (a)</td>
+              <td class="input_name">front width (b)</td>
+              <td class="input_name">box height (c)</td>
+          </tr>
+          <tr>
+            <td class="input_dim" ><input id="box_a" type="number" value=15></td>
+            <td class="input_dim" ><input id="box_b" type="number" value=142></td>
+            <td class="input_dim" ><input id="box_c" type="number" value=211></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table id="rules">
+      <!-- <thead>
+          <tr>
+              <th colspan="1">Rules</th>
+          </tr>
+      </thead> -->
+    <tbody>
+      <tr>
+        <td><input id="rule_1" type="checkbox" checked></td>
+        <td>Boxes stacked in the initial sense</td>
+      </tr>
+      <tr>
+          <td><input id="rule_2" type="checkbox"></td>
+          <td>Boxes upright, stacked in the same direction</td>
+      </tr>
+      <tr>
+        <td><input id="rule_3" type="checkbox"></td>
+        <td>Boxes upright, fill all the spaces with boxes in the next way</td>
+    </tr>
+      <tr>
+        <td><input id="rule_4" type="checkbox"></td>
+        <td>All the possibilities, stacked in the same direction</td>
+      </tr>
+      <tr>
+        <td><input id="rule_5" type="checkbox"></td>
+        <td>All the possibilities, fill all the spaces with boxes in any direction</td>
+      </tr>
+  </tbody>
+</table>
+    </div>
+    
+    </div>
+    
+    <div id="solution_table">
+      <button id="calculate_button">Calculate</button>
+      <table class="button_light_switch">
+        <thead>
+            <tr>
+                <th colspan="4">Maximum quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+              <td>In center</td>
+              <td id="center_group_quantity">...</td>
+              <td>Sense</td>
+              <td id="center_group_way">...</td>
+            </tr>
+            <tr>
+              <td>In front</td>
+              <td id="front_group_quantity">...</td>
+              <td>Sense</td>
+              <td id="front_group_way">...</td>
+            </tr>
+            <tr>
+              <td>In side</td>
+              <td id="side_group_quantity">...</td>
+              <td>Sense</td>
+              <td id="side_group_way">...</td>
+            </tr>
+            <tr>
+              <td>In top</td>
+              <td id="top_group_quantity">...</td>
+              <td>Sense</td>
+              <td id="top_group_way">...</td>
+            </tr>
+            <tr>
+              <td>Total</td>
+              <td id="total_quantity">...</td>
+              <td>Volume</td>
+              <td id="volume_percent">...</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+      <div class="lien_info">
+      Senses informations
+      </div>
+      <div id="image_switch">
+        <img src="images/senses_boxes_col_300px.png" alt="images info senses">
+      </div>
+  </body>
+</html>
