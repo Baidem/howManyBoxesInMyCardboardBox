@@ -22,7 +22,11 @@ const rule5 = document.querySelector('#rule_5');
 
 // ACTION BUTTON FOR RUN CALCUL
 const calculateButton = document.querySelector('#calculate_button');
-const lienInfo = document.querySelector(".lien_info");
+// const senses_information = document.querySelector(".senses_information");
+
+// image senses info
+// const imageSwitch = document.createElement(".image_switch");
+
 
 // COORDINATES OF THE CELLS OF THE RESULTS TABLE - à remommer
 // id=solution_table
@@ -777,10 +781,11 @@ calculateButton.addEventListener('click', () =>
     calculator();
     console.log("THE END caculateButton");
 });
-lienInfo.addEventListener('click', () => 
-{   console.log("RUN lienInfo");
-    
-});
+// senses_information.addEventListener('click', () => 
+// {   console.log("RUN senses_information");
+//     // imageSwitch.visibility = "visible";
+//     console.log(imageSwitch); 
+// });
 
 function calculator() {
     if (rule1.checked) { // "Boxes stacked in the initial sense" : Test way1.
