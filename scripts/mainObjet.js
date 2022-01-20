@@ -374,7 +374,7 @@ function calculRule3 () {
         let theBoardRule3 = calculBoard(theCardboardBox,way);
         selectList.push(fillingTournementV2(theBoardRule3, "rule3"))
     });
-    console.log("selectList", selectList);
+    // console.log("selectList", selectList);
     //model
     let biggestList = [];
     selectList.forEach(element => {
@@ -388,7 +388,7 @@ function calculRule3 () {
             result = element;
         }
     };
-    console.log("result", result);
+    // console.log("result", result);
     resultRule3 = loadResultRule3(result);
     resultRule3.letsPrint();
 
@@ -496,7 +496,7 @@ function calculRule5 () {
 
 function fillingTournementV2(theBoard, rule) {
     console.log("RUN fillingTournement");
-    console.log("theBoard",theBoard,"rule :",rule);
+    // console.log("theBoard",theBoard,"rule :",rule);
     let containerSpace = theBoard.containerSpace;
     let fillSpace = theBoard.fillSpace;
     let freeSpace = theBoard.freeSpace;
@@ -742,11 +742,11 @@ function tryWaysList(theContainer,waysList) {
     waysList.forEach(elementWaysList => {
         tryWayListResult.push(calculBoard(theContainer,elementWaysList));           
     });
-    console.log("RETURN", tryWayListResult);
+    // console.log("RETURN", tryWayListResult);
     return tryWayListResult;
 }
 function tryWaysListTournement(list) {
-    console.log("hello tryWaysListTournement");
+    // console.log("hello tryWaysListTournement");
     // console.log("list 527", list);
     let listOfTotalQuantity = [];
     let biggestTotalQuantity;
@@ -766,26 +766,40 @@ function tryWaysListTournement(list) {
     return result;
 }
 
-//             let firstFaceSideTop = ['firstFaceSideTop',['faceSpace',dimVacXYZ[1],dimSpaceXYZ[2],dimSpaceXYZ[3]],['sideSpace',dimGroupXYZ[1],dimVacXYZ[2],dimSpaceXYZ[3]],['topSpace',dimGroupXYZ[1],dimGroupXYZ[2],dimVacXYZ[3]]];
-//             let firstSideFaceTop = ['firstSideFaceTop',['faceSpace',dimVacXYZ[1],dimGroupXYZ[2],dimSpaceXYZ[3]],['sideSpace',dimSpaceXYZ[1],dimVacXYZ[2],dimSpaceXYZ[3]],['topSpace',dimGroupXYZ[1],dimGroupXYZ[2],dimVacXYZ[3]]];
-
+// Function : exclude values smaller than or equal to 0 and replace them with 0.001.
+function valueZeroAndSmaller() {
+    if (cardboardInteriorSpaceDimensionX.value <= 0 || cardboardInteriorSpaceDimensionX.value == undefined) {
+        cardboardInteriorSpaceDimensionX.value = 0.001; 
+    }
+    if (cardboardInteriorSpaceDimensionY.value <= 0 || cardboardInteriorSpaceDimensionY.value == undefined) {
+        cardboardInteriorSpaceDimensionY.value = 0.001; 
+    }
+    if (cardboardInteriorSpaceDimensionZ.value <= 0 || cardboardInteriorSpaceDimensionZ.value == undefined) {
+        cardboardInteriorSpaceDimensionZ.value = 0.001; 
+    }
+    if (boxSideWidthDimensionA.value <= 0 || boxSideWidthDimensionA.value == undefined) {
+        boxSideWidthDimensionA.value = 0.001; 
+    }
+    if (boxFrontWidthDimensionB.value <= 0 || boxFrontWidthDimensionB.value == undefined) {
+        boxFrontWidthDimensionB.value = 0.001; 
+    }
+    if (boxHeightDimensionC.value <= 0 || boxHeightDimensionC.value == undefined) {
+        boxHeightDimensionC.value = 0.001; 
+    }
+}
 
 // _,;:!!:;,_ PROGRAMMING _,;:!!:;,_
 
-// calculateButton - => faire un débug des valeurs à 0 ou undefined
+// calculateButton - => Start the calcul
 calculateButton.addEventListener('click', () => 
-{   console.log("RUN caculateButton");
+{   // console.log("RUN caculateButton");
+    valueZeroAndSmaller()
     theCardboardBox = new Container('theCardboardBox', cardboardInteriorSpaceDimensionX.value, cardboardInteriorSpaceDimensionY.value, cardboardInteriorSpaceDimensionZ.value);
     theBox = new Inner('theBox', boxSideWidthDimensionA.value, boxFrontWidthDimensionB.value, boxHeightDimensionC.value);
-    console.log('theCardboardBox',theCardboardBox,'theBox',theBox);
+    // console.log('theCardboardBox',theCardboardBox,'theBox',theBox);
     calculator();
-    console.log("THE END caculateButton");
+    // console.log("THE END caculateButton");
 });
-// senses_information.addEventListener('click', () => 
-// {   console.log("RUN senses_information");
-//     // imageSwitch.visibility = "visible";
-//     console.log(imageSwitch); 
-// });
 
 function calculator() {
     if (rule1.checked) { // "Boxes stacked in the initial sense" : Test way1.
@@ -809,9 +823,3 @@ function calculator() {
         calculRule5();   
     }
 }
-
-
-
-
-
-// window.alert("error");
