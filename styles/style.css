@@ -50,6 +50,8 @@ header{
 .senses_information {
   border-top: 3px solid #003f7b ;
   box-sizing: border-box;
+  box-shadow: #1b1b1b 1px 1px 2px;
+
 }
 header, button, .input_dim input, .senses_information{
   background-color: #00305c;
@@ -219,7 +221,6 @@ filter: brightness(110%);
   transition: visibility 0s linear 0s, opacity 500ms;
 }
 
-
 /* Background images effect */
 
 .image-wrap {
@@ -231,23 +232,53 @@ filter: brightness(110%);
   top: 0px;
   z-index: -10;
   border-radius: 10px;
+  background-color: black;
 }
 
 .image-wrap .image-01 {
-  height: 150%;
-  animation: move 40s ease infinite alternate;
+  width: 100%;
+  animation: lines 20s ease infinite alternate;
   position: absolute;
+  z-index: -7;
 }
 .image-wrap .image-02 {
-  height: 150%;
-  animation: move 30s ease infinite alternate;
+  height: 100%;
+  animation: donutbk 40s ease infinite alternate;
   position: absolute;
+  right: 0px;
+  z-index: -8;
+}
+.image-wrap .image-03 {
+  height: 100%;
+  animation: donutwt 40s ease infinite alternate;
+  position: absolute;
+  left: 0px;
+  z-index: -9;
 }
 
-@keyframes move {
+
+@keyframes lines {
   0% {
-    transform-origin: bottom right;
+    transform-origin: center;
     transform: scale(1.0);
+  }
+  100% {
+    transform: scale(2.0);
+  }
+}
+@keyframes donutbk {
+  0% {
+    transform-origin: left;
+    transform: scale(2.0);
+  }
+  100% {
+    transform: scale(1.5);
+  }
+}
+@keyframes donutwt {
+  0% {
+    transform-origin: right;
+    transform: scale(2.0);
   }
   100% {
     transform: scale(1.5);
