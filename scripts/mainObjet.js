@@ -299,7 +299,7 @@ function calculRule1() {
         let quantityInTop = 0;
         let senseInTop = "__"; 
         let totalOfQuantities = quantityInCenter;
-        let totalVolumePercent =  +(((Math.ceil((theBoardToPrint.volumeFilling/theBoardToPrint.volumeContainer)²&0))/100).toFixed(2)) + "%";
+        let totalVolumePercent =  +(((Math.ceil((theBoardToPrint.volumeFilling/theBoardToPrint.volumeContainer)*10000))/100).toFixed(2)) + "%";
         return new TheBoardToPrint (quantityInCenter,senseInCenter,  quantityInFront,senseInFront,  quantityInSide,senseInSide,  quantityInTop,senseInTop,  totalOfQuantities,totalVolumePercent);
     }
 }
