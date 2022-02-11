@@ -278,44 +278,6 @@ function calculBoard(theContainer,theInnerBox) {
     }
     return theBoard;
 }
-/*function printSolution(theBoardToPrint) {
-    console.log("theBoardToPrint", theBoardToPrint);
-
-    let centerSpaceTotalQuantity; 
-    if (theBoardToPrint.totalQuantity === undefined) {centerSpaceTotalQuantity = 0;} else {centerSpaceTotalQuantity = theBoardToPrint.totalQuantity}
-    centerGroupQuantity.innerText = centerSpaceTotalQuantity;
-    if (theBoardToPrint.reference == undefined) {centerGroupWay.innerText = "__";}else {centerGroupWay.innerText = theBoardToPrint.reference.substr(theBoardToPrint.reference.length - 4);}
-
-    let frontSpaceTotalQuantity;
-    if (theBoardToPrint.frontSpace == undefined) {frontSpaceTotalQuantity = 0;}else {frontSpaceTotalQuantity = theBoardToPrint.frontSpace.totalQuantity;}
-    frontGroupQuantity.innerText = frontSpaceTotalQuantity;
-    if (theBoardToPrint.frontSpace == undefined) {frontGroupWay.innerText = "__";}else {frontGroupWay.innerText = theBoardToPrint.frontSpace.reference.substr(theBoardToPrint.frontSpace.reference.length - 4);}
-
-    let sideSpaceTotalQuantity;
-    if (theBoardToPrint.sideSpace == undefined) {sideSpaceTotalQuantity = 0;}else {sideSpaceTotalQuantity = theBoardToPrint.sideSpace.totalQuantity;}
-    sideGroupQuantity.innerText = sideSpaceTotalQuantity;
-    if (theBoardToPrint.sideSpace == undefined) {sideGroupWay.innerText = "__";}else {sideGroupWay.innerText = theBoardToPrint.sideSpace.reference.substr(theBoardToPrint.sideSpace.reference.length - 4);}
-
-    let topSpaceTotalQuantity;
-    if (theBoardToPrint.topSpace == undefined) {topSpaceTotalQuantity = 0;}else {topSpaceTotalQuantity = theBoardToPrint.topSpace.totalQuantity;}
-    topGroupQuantity.innerText = topSpaceTotalQuantity;
-    if (theBoardToPrint.topSpace == undefined) {topGroupWay.innerText = "__";}else {topGroupWay.innerText = theBoardToPrint.topSpace.reference.substr(theBoardToPrint.topSpace.reference.length - 4);}
-
-    let totalSum = centerSpaceTotalQuantity + frontSpaceTotalQuantity + topSpaceTotalQuantity; 
-    totalQuantity.innerText = totalSum;
-
-    let totalVolumeFillingPercent;
-    let centerVolumeFilling;
-    if (theBoardToPrint.volumeFilling == undefined) {centerVolumeFilling = 0} else {centerVolumeFilling = theBoardToPrint.volumeFilling}
-    let frontVolumeFilling;
-    if (theBoardToPrint.frontSpace == undefined) {frontVolumeFilling = 0} else {frontVolumeFilling = theBoardToPrint.frontSpace.volumeFilling}
-    let sideVolumeFilling;
-    if (theBoardToPrint.sideSpace == undefined) {sideVolumeFilling = 0} else {sideVolumeFilling = theBoardToPrint.sideSpace.volumeFilling}
-    let topVolumeFilling;
-    if (theBoardToPrint.topSpace == undefined) {topVolumeFilling = 0} else {topVolumeFilling = theBoardToPrint.topSpace.volumeFilling}
-    totalVolumeFillingPercent = +(((Math.ceil(((centerVolumeFilling + frontVolumeFilling + sideVolumeFilling + topVolumeFilling)/theBoardToPrint.volumeContainer)*10000))/100).toFixed(2));
-    volumePercent.innerText = totalVolumeFillingPercent + "%";
-}*/
 function calculRule1() {
     /* ___,;:! calculRule1 !:;,___
     *   Appel calculBoard pour charger la table des calculs => theBoard {...}
