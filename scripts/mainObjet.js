@@ -46,45 +46,60 @@ const volumePercent = document.querySelector('#volume_percent');
 var theBoard = {};
 
  // _,;:!!:;,_ CONTROLE CHECKING BOXES _,;:!!:;,_
- rule1.addEventListener('change', () =>{
-    if (rule1.checked){ rule2.checked = false;
-                        rule3.checked = false;
-                        rule4.checked = false;
-                        rule5.checked = false;  }
-    else {              rule1.checked = true;   }   
+rule1.addEventListener('change', () =>{ // Check on the rule1
+    if (rule1.checked){ 
+        rule2.checked = false;
+        rule3.checked = false;
+        rule4.checked = false;
+        rule5.checked = false;
+    } else {
+        rule1.checked = true;
+    }   
 })
-rule2.addEventListener('change', () =>{
-    if (rule2.checked){ rule1.checked = false;
-                        rule3.checked = false;
-                        rule4.checked = false;
-                        rule5.checked = false;  }
-    else {              rule1.checked = true;   }   
+rule2.addEventListener('change', () =>{ // Check on the rule2
+    if (rule2.checked){ 
+        rule1.checked = false;
+        rule3.checked = false;
+        rule4.checked = false;
+        rule5.checked = false;
+    } else {
+        rule1.checked = true;
+    }   
 })
-rule3.addEventListener('change', () =>{
-    if (rule3.checked){ rule1.checked = false;
-                        rule2.checked = false;
-                        rule4.checked = false;
-                        rule5.checked = false;  }
-    else {              rule1.checked = true;   }   
+rule3.addEventListener('change', () =>{ // Check on the rule3
+    if (rule3.checked){
+        rule1.checked = false;
+        rule2.checked = false;
+        rule4.checked = false;
+        rule5.checked = false;
+
+    } else {
+        rule1.checked = true;
+    }   
 })
-rule4.addEventListener('change', () =>{
-    if (rule4.checked){ rule1.checked = false;
-                        rule2.checked = false;
-                        rule3.checked = false;
-                        rule5.checked = false;  }
-    else {              rule1.checked = true;   }   
+rule4.addEventListener('change', () =>{ // Check on the rule4
+    if (rule4.checked){ 
+        rule1.checked = false;
+        rule2.checked = false;
+        rule3.checked = false;
+        rule5.checked = false;
+    } else {
+        rule1.checked = true;
+    }   
 })
-rule5.addEventListener('change', () =>{
-    if (rule5.checked){ rule1.checked = false;
-                        rule2.checked = false;
-                        rule3.checked = false;
-                        rule4.checked = false;  }
-    else {              rule1.checked = true;   }   
+rule5.addEventListener('change', () =>{ // Check on the rule5
+    if (rule5.checked){
+        rule1.checked = false;
+        rule2.checked = false;
+        rule3.checked = false;
+        rule4.checked = false;
+    } else {
+        rule1.checked = true;
+    }   
 })
 
 // _,;:!!:;,_ CLASS PART _,;:!!:;,_ 
-// Représente un contenant à remplir
-class   Container {
+class   Container { // Class for a container box (cardboard box)
     constructor(name,dimensionX,dimensionY,dimensionZ){
         this.name = name;
         this.dimensionX = +dimensionX;
@@ -94,8 +109,7 @@ class   Container {
     }
     //method
 }
-// Représente les objets qui remplissent le contenant
-class   Inner {
+class   Inner { // Class for an inner box
     constructor(name,dimensionA,dimensionB,dimensionC){
         this.name = name;
         this.dimensionA = +dimensionA;
@@ -147,27 +161,25 @@ class   Inner {
     }
     //method
 }
-// le But final : the goal
-class   TheBoardToPrint {
+class   TheBoardToPrint { // Class of the board of result - method for print the result
     constructor(quantityInCenter,senseInCenter,  quantityInFront,senseInFront,  quantityInSide,senseInSide,  quantityInTop,senseInTop,  totalOfQuantities,totalVolumePercent){
-        //ligne1
+        //line 1 : group in the center
         this.quantityInCenter = quantityInCenter;
         this.senseInCenter = senseInCenter;
-        //ligne2
+        //line 2 : group in the front
         this.quantityInFront = quantityInFront;
         this.senseInFront = senseInFront;
-        //ligne3
+        //line 3 : group in the side
         this.quantityInSide = quantityInSide;
         this.senseInSide = senseInSide;
-        //ligne4
+        //line 4 : group on the top
         this.quantityInTop = quantityInTop;
         this.senseInTop = senseInTop;
-        //ligne5
+        //line 5 : the total quantity and the volume percent
         this.totalOfQuantities = totalOfQuantities;
         this.totalVolumePercent = totalVolumePercent;
     }
-    //method
-    letsPrint() {
+    letsPrint() { // Method for print the result
         centerGroupQuantity.innerText = this.quantityInCenter;
         centerGroupWay.innerText = this.senseInCenter;
 
@@ -184,7 +196,6 @@ class   TheBoardToPrint {
         volumePercent.innerText = this.totalVolumePercent;
     }
 }
-
 
 // _,;:!!:;,_ FUNCTIONS _,;:!!:;,_
 
@@ -267,7 +278,7 @@ function calculBoard(theContainer,theInnerBox) {
     }
     return theBoard;
 }
-function printSolution(theBoardToPrint) {
+/*function printSolution(theBoardToPrint) {
     console.log("theBoardToPrint", theBoardToPrint);
 
     let centerSpaceTotalQuantity; 
@@ -304,8 +315,7 @@ function printSolution(theBoardToPrint) {
     if (theBoardToPrint.topSpace == undefined) {topVolumeFilling = 0} else {topVolumeFilling = theBoardToPrint.topSpace.volumeFilling}
     totalVolumeFillingPercent = +(((Math.ceil(((centerVolumeFilling + frontVolumeFilling + sideVolumeFilling + topVolumeFilling)/theBoardToPrint.volumeContainer)*10000))/100).toFixed(2));
     volumePercent.innerText = totalVolumeFillingPercent + "%";
-}
-
+}*/
 function calculRule1() {
     /* ___,;:! calculRule1 !:;,___
     *   Appel calculBoard pour charger la table des calculs => theBoard {...}
@@ -327,7 +337,7 @@ function calculRule1() {
         let quantityInTop = 0;
         let senseInTop = "__"; 
         let totalOfQuantities = quantityInCenter;
-        let totalVolumePercent =  +(((Math.ceil((theBoardToPrint.volumeFilling/theBoardToPrint.volumeContainer)*10000))/100).toFixed(2)) + "%";
+        let totalVolumePercent =  +(((Math.ceil((theBoardToPrint.volumeFilling/theBoardToPrint.volumeContainer)²&0))/100).toFixed(2)) + "%";
         return new TheBoardToPrint (quantityInCenter,senseInCenter,  quantityInFront,senseInFront,  quantityInSide,senseInSide,  quantityInTop,senseInTop,  totalOfQuantities,totalVolumePercent);
     }
 }
@@ -493,7 +503,6 @@ function calculRule5 () {
         return new TheBoardToPrint (quantityInCenter,senseInCenter,  quantityInFront,senseInFront,  quantityInSide,senseInSide,  quantityInTop,senseInTop,  totalOfQuantities,totalVolumePercent);
     }
 }
-
 function fillingTournementV2(theBoard, rule) {
     console.log("RUN fillingTournement");
     // console.log("theBoard",theBoard,"rule :",rule);
