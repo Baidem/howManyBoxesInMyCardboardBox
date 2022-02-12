@@ -43,7 +43,7 @@ const volumePercent = document.querySelector('#volume_percent');
 
 // THE BOARD - calcul data board
 // Load and unload all the informations for calculate a result
-var theBoard = {};
+var TheBoard = {};
 
  // _,;:!!:;,_ CONTROLE CHECKING BOXES _,;:!!:;,_
 rule1.addEventListener('change', () =>{ // Check on the rule1
@@ -196,601 +196,544 @@ class   TheBoardToPrint { // Class of the board of result - method for print the
         volumePercent.innerText = this.totalVolumePercent;
     }
 }
+// _,;:!!:;,_ PROGRAM _,;:!!:;,_
 
-// _,;:!!:;,_ FUNCTIONS _,;:!!:;,_
-
-// calculBoard
-// calculer une quantité  de boites dans un volume donné
-function calculBoard(theContainer,theInnerBox) {
-    if (theContainer.dimensionX < theInnerBox.dimensionX || theContainer.dimensionY < theInnerBox.dimensionY || theContainer.dimensionZ < theInnerBox.dimensionZ) {
-        // Fail Calcul Board
-        theBoard = {};
-        theBoard.reference = theContainer.name + " - " + theInnerBox.name;
-        theBoard.quantityOFlawX = 0;
-        theBoard.quantityOFlawY = 0;
-        theBoard.quantityOFlawZ = 0;
-        theBoard.totalQuantity = 0;
-        theBoard.containerSpace = {
-            name : "containerSpace",
-            dimensionX : theContainer.dimensionX,
-            dimensionY : theContainer.dimensionY,
-            dimensionZ : theContainer.dimensionZ,
-            volume : theContainer.volume        
-        };
-        theBoard.fillSpace = {
-            name : 'fillSpace',
-                dimensionX : 0,
-                dimensionY : 0,
-                dimensionZ : 0,
-                volume : 0
-        };
-        theBoard.freeSpace = {
-            name : 'freeSpace',
-                dimensionX : 0,
-                dimensionY : 0,
-                dimensionZ : 0,
-                volume : 0
-        };
-        theBoard.volumeContainer = theContainer.volume;
-        theBoard.volumeFilling = 0;
-        theBoard.percentageOfVolumeFilling = 0;
-    } else { // Calcul Board
-        let reference = theContainer.name + " - " + theInnerBox.name;
-        let quantityOFlawX = Math.floor (theContainer.dimensionX / theInnerBox.dimensionX);
-        let quantityOFlawY = Math.floor (theContainer.dimensionY / theInnerBox.dimensionY);
-        let quantityOFlawZ = Math.floor (theContainer.dimensionZ / theInnerBox.dimensionZ);
-        let totalQuantity = quantityOFlawX * quantityOFlawY * quantityOFlawZ;
-        let fillSpace = {
-            name : 'fillSpace',
-                dimensionX : theInnerBox.dimensionX * quantityOFlawX,
-                dimensionY : theInnerBox.dimensionY * quantityOFlawY,
-                dimensionZ : theInnerBox.dimensionZ * quantityOFlawZ,
-                volume : (theInnerBox.dimensionX * quantityOFlawX)*(theInnerBox.dimensionY * quantityOFlawY)*(theInnerBox.dimensionZ * quantityOFlawZ)
-        };
-        let freeSpace = {
-            name : 'freeSpace',
-                dimensionX : theContainer.dimensionX - fillSpace.dimensionX,
-                dimensionY : theContainer.dimensionY - fillSpace.dimensionY,
-                dimensionZ : theContainer.dimensionZ - fillSpace.dimensionZ,
-                volume : (theContainer.dimensionX - fillSpace.dimensionX) * (theContainer.dimensionY - fillSpace.dimensionY) * (theContainer.dimensionZ - fillSpace.dimensionZ)
-        };
-        let volumeFilling = theInnerBox.volume * totalQuantity;
-        let percentageOfVolumeFilling = +(((Math.ceil(((theInnerBox.volume * totalQuantity)/theContainer.volume)*10000))/100).toFixed(2));
-
-        theBoard = {};
-        theBoard.reference = reference,
-        theBoard.quantityOFlawX = quantityOFlawX,
-        theBoard.quantityOFlawY = quantityOFlawY,
-        theBoard.quantityOFlawZ = quantityOFlawZ,
-        theBoard.totalQuantity = totalQuantity,
-        theBoard.containerSpace = {
-            name : "containerSpace",
-            dimensionX : theContainer.dimensionX,
-            dimensionY : theContainer.dimensionY,
-            dimensionZ : theContainer.dimensionZ,
-            volume : theContainer.volume        
-        };
-        theBoard.fillSpace = fillSpace,
-        theBoard.freeSpace = freeSpace
-        theBoard.volumeContainer = theContainer.volume;
-        theBoard.volumeFilling = volumeFilling;
-        theBoard.percentageOfVolumeFilling = percentageOfVolumeFilling;
-    }
-    return theBoard;
-}
-function calculRule1() {
-    /* ___,;:! calculRule1 !:;,___
-    *   Appel calculBoard pour charger la table des calculs => theBoard {...}
-    *   Converti la table des calculs pour l'affichage des résultats => resultRule1 {...}
-    *             * fait appel à la fonction "loadResultRule1" qui charge les paramètres du nouvel objet "resultRule1"
-    *   Affiche les résultats sur le tableau HTML avec la methode de l'objet => resultRule1.letsPrint()
-     */
-    console.log("calculRule1");
-        resultRule1 = loadResultRule1(calculBoard(theCardboardBox,theBox.way1));
-        resultRule1.letsPrint();
-
-    function loadResultRule1(theBoardToPrint) {
-        let quantityInCenter = theBoardToPrint.totalQuantity;
-        let senseInCenter = theBoardToPrint.reference.substr(theBoardToPrint.reference.length - 4);
-        let quantityInFront = 0;
-        let senseInFront = "__";
-        let quantityInSide = 0;
-        let senseInSide = "__";
-        let quantityInTop = 0;
-        let senseInTop = "__"; 
-        let totalOfQuantities = quantityInCenter;
-        let totalVolumePercent =  +(((Math.ceil((theBoardToPrint.volumeFilling/theBoardToPrint.volumeContainer)*10000))/100).toFixed(2)) + "%";
-        return new TheBoardToPrint (quantityInCenter,senseInCenter,  quantityInFront,senseInFront,  quantityInSide,senseInSide,  quantityInTop,senseInTop,  totalOfQuantities,totalVolumePercent);
-    }
-}
-function calculRule2() {
-    /* ___,;:! calculRule2 !:;,___
-    *   Appel calculBoard pour charger la table des calculs  avec les sens de rangement "debout"=> theBoard {...}
-                * charge les tables dans la liste => selectList
-    *   Choisi la bonne solution dans selectList
-    *   Converti la table des calculs choisie pour l'affichage des résultats => resultRule1 {...}
-    *           * fait appel à la fonction "loadResultRule2" qui charge les paramètres du nouvel objet "resultRule1"
-    *   Affiche les résultats sur le tableau HTML avec la methode de l'objet => resultRule2.letsPrint()
-    */
-    console.log("calculRule2");
-    let selectList = [];
-    selectList.push(calculBoard(theCardboardBox,theBox.way1));
-    selectList.push(calculBoard(theCardboardBox,theBox.way2));
-    // console.log("selectList",selectList);
-    if (selectList[0].totalQuantity >= selectList[1].totalQuantity) { // choose way1
-        resultRule2 = loadResultRule2(selectList[0]); 
-    } else { // choose way2
-        resultRule2 = loadResultRule2(selectList[1]);
-    }
-    resultRule2.letsPrint();
-
-    function loadResultRule2(theBoardToPrint) {
-        let quantityInCenter = theBoardToPrint.totalQuantity;
-        let senseInCenter = theBoardToPrint.reference.substr(theBoardToPrint.reference.length - 4);
-        let quantityInFront = 0;
-        let senseInFront = "__";
-        let quantityInSide = 0;
-        let senseInSide = "__";
-        let quantityInTop = 0;
-        let senseInTop = "__"; 
-        let totalOfQuantities = quantityInCenter;
-        let totalVolumePercent =  +(((Math.ceil((theBoardToPrint.volumeFilling/theBoardToPrint.volumeContainer)*10000))/100).toFixed(2)) + "%";
-        return new TheBoardToPrint (quantityInCenter,senseInCenter,  quantityInFront,senseInFront,  quantityInSide,senseInSide,  quantityInTop,senseInTop,  totalOfQuantities,totalVolumePercent);
-    }
-}
-function calculRule3 () {
-    console.log("RUN calculRule3");
-    let selectList = [];
-    let waysList = [theBox.way1,theBox.way2];
-    waysList.forEach(way => {
-        let theBoardRule3 = calculBoard(theCardboardBox,way);
-        selectList.push(fillingTournementV2(theBoardRule3, "rule3"))
-    });
-    // console.log("selectList", selectList);
-    //model
-    let biggestList = [];
-    selectList.forEach(element => {
-        biggestList.push(element[0].totalQuantity + element[1].totalQuantity + element[2].totalQuantity + element[3].totalQuantity);
-    });
-    let theBiggestQuantity = Math.max(...biggestList);
-    let result;
-    for (let index = selectList.length-1; index >= 0; index--) {
-        const element = selectList[index];
-            if ((element[0].totalQuantity + element[1].totalQuantity + element[2].totalQuantity + element[3].totalQuantity) == theBiggestQuantity) {
-            result = element;
-        }
-    };
-    // console.log("result", result);
-    resultRule3 = loadResultRule3(result);
-    resultRule3.letsPrint();
-
-    function loadResultRule3(result) {
-        let quantityInCenter = result[0].totalQuantity;
-        let senseInCenter = result[0].reference.substr(result[0].reference.length - 4);
-        let quantityInFront = result[1].totalQuantity;
-        let senseInFront = result[1].reference.substr(result[1].reference.length - 4);
-        if (quantityInFront == 0) {senseInFront = "__";}
-        let quantityInSide = result[2].totalQuantity;
-        let senseInSide = result[2].reference.substr(result[2].reference.length - 4);
-        if (quantityInSide == 0) {senseInSide = "__";}
-        let quantityInTop = result[3].totalQuantity;
-        let senseInTop = result[3].reference.substr(result[3].reference.length - 4);
-        if (quantityInTop == 0) {senseInTop = "__";}
-        let totalOfQuantities = quantityInCenter + quantityInFront + quantityInSide + quantityInTop;
-        let totalVolumePercent =  +(((Math.ceil(((result[0].volumeFilling + result[1].volumeFilling + result[2].volumeFilling + result[3].volumeFilling)/result[0].volumeContainer)*10000))/100).toFixed(2)) + "%";
-        return new TheBoardToPrint (quantityInCenter,senseInCenter,  quantityInFront,senseInFront,  quantityInSide,senseInSide,  quantityInTop,senseInTop,  totalOfQuantities,totalVolumePercent);
-    }
-}
-function calculRule4() {
-    /* ___,;:! calculRule4 !:;,___
-    *   comment here!!!!!!
-    */
-    console.log("calculRule4");
-    let selectList = [];
-    let waysList = [theBox.way1,theBox.way2,theBox.way3,theBox.way4,theBox.way5,theBox.way6];
-    waysList.forEach(way => {
-        let theBoardRule4 = calculBoard(theCardboardBox,way);
-        selectList.push(theBoardRule4)
-    });
-    console.log("selectList",selectList);
-    let biggestList = [];
-    selectList.forEach(element => {
-        biggestList.push(element.totalQuantity);
-    });
-    let theBiggestQuantity = Math.max(...biggestList);
-    let result;
-    for (let index = selectList.length-1; index >= 0; index--) {
-        const element = selectList[index];
-            if (element.totalQuantity == theBiggestQuantity) {
-            result = element;
-        }
-    };
-    resultRule4 = loadResultRule4(result);
-    resultRule4.letsPrint();
-
-    function loadResultRule4(theBoardToPrint) {
-        let quantityInCenter = theBoardToPrint.totalQuantity;
-        let senseInCenter = theBoardToPrint.reference.substr(theBoardToPrint.reference.length - 4);
-        let quantityInFront = 0;
-        let senseInFront = "__";
-        let quantityInSide = 0;
-        let senseInSide = "__";
-        let quantityInTop = 0;
-        let senseInTop = "__"; 
-        let totalOfQuantities = quantityInCenter;
-        let totalVolumePercent =  +(((Math.ceil((theBoardToPrint.volumeFilling/theBoardToPrint.volumeContainer)*10000))/100).toFixed(2)) + "%";
-        return new TheBoardToPrint (quantityInCenter,senseInCenter,  quantityInFront,senseInFront,  quantityInSide,senseInSide,  quantityInTop,senseInTop,  totalOfQuantities,totalVolumePercent);
-    }
-}
-function calculRule5 () {
-    console.log("RUN calculRule5");
-    let selectList = [];
-    let waysList = [theBox.way1,theBox.way2,theBox.way3,theBox.way4,theBox.way5,theBox.way6];
-    waysList.forEach(way => {
-        let theBoardRule5 = calculBoard(theCardboardBox,way);
-        selectList.push(fillingTournementV2(theBoardRule5, "rule5"))
-    });
-    console.log("selectList", selectList);
-    //model
-    let biggestList = [];
-    selectList.forEach(element => {
-        biggestList.push(element[0].totalQuantity + element[1].totalQuantity + element[2].totalQuantity + element[3].totalQuantity);
-    });
-    let theBiggestQuantity = Math.max(...biggestList);
-    let result;
-    for (let index = selectList.length-1; index >= 0; index--) {
-        const element = selectList[index];
-            if ((element[0].totalQuantity + element[1].totalQuantity + element[2].totalQuantity + element[3].totalQuantity) == theBiggestQuantity) {
-            result = element;
-        }
-    };
-    console.log("result", result);
-    resultRule5 = loadResultRule5(result);
-    resultRule5.letsPrint();
-
-    function loadResultRule5(result) {
-        let quantityInCenter = result[0].totalQuantity;
-        let senseInCenter = result[0].reference.substr(result[0].reference.length - 4);
-        let quantityInFront = result[1].totalQuantity;
-        let senseInFront = result[1].reference.substr(result[1].reference.length - 4);
-        if (quantityInFront == 0) {senseInFront = "__";}
-        let quantityInSide = result[2].totalQuantity;
-        let senseInSide = result[2].reference.substr(result[2].reference.length - 4);
-        if (quantityInSide == 0) {senseInSide = "__";}
-        let quantityInTop = result[3].totalQuantity;
-        let senseInTop = result[3].reference.substr(result[3].reference.length - 4);
-        if (quantityInTop == 0) {senseInTop = "__";}
-        let totalOfQuantities = quantityInCenter + quantityInFront + quantityInSide + quantityInTop;
-        let totalVolumePercent =  +(((Math.ceil(((result[0].volumeFilling + result[1].volumeFilling + result[2].volumeFilling + result[3].volumeFilling)/result[0].volumeContainer)*10000))/100).toFixed(2)) + "%";
-        return new TheBoardToPrint (quantityInCenter,senseInCenter,  quantityInFront,senseInFront,  quantityInSide,senseInSide,  quantityInTop,senseInTop,  totalOfQuantities,totalVolumePercent);
-    }
-}
-function fillingTournementV2(theBoard, rule) {
-    console.log("RUN fillingTournement");
-    // console.log("theBoard",theBoard,"rule :",rule);
-    let containerSpace = theBoard.containerSpace;
-    let fillSpace = theBoard.fillSpace;
-    let freeSpace = theBoard.freeSpace;
-    
-    let containersList;
-    let waysList;
-    let listOfChooses = [];
-    if (rule == "rule3") { // définir containersList et waysList
-        containersList = [
-            firstFaceSideTop = { // FST
-                name : 'firstFaceSideTop',
-                faceFreeSpace : {
-                    name : "faceFreeSpace",
-                    dimensionX : freeSpace.dimensionX,
-                    dimensionY : containerSpace.dimensionY,
-                    dimensionZ : containerSpace.dimensionZ,
-                    volume : freeSpace.dimensionX * containerSpace.dimensionY*containerSpace.dimensionZ
-                },
-                sideFreeSpace : {
-                    name : "sideFreeSpace",
-                    dimensionX : fillSpace.dimensionX,
-                    dimensionY : freeSpace.dimensionY,
-                    dimensionZ : containerSpace.dimensionZ,
-                    volume : fillSpace.dimensionX*freeSpace.dimensionY*containerSpace.dimensionZ
-                },
-                topFreeSpace : {
-                    name : "topFreeSpace",
-                    dimensionX : fillSpace.dimensionX,
-                    dimensionY : fillSpace.dimensionY,
-                    dimensionZ : freeSpace.dimensionZ,
-                    volume : fillSpace.dimensionX*fillSpace.dimensionY*freeSpace.dimensionZ
-                }
-            },
-            firstSideFaceTop = { // SFT
-                name : 'firstSideFaceTop',
-                faceFreeSpace : {
-                    name : 'faceFreeSpace',
-                    dimensionX : freeSpace.dimensionX,
-                    dimensionY : fillSpace.dimensionY,
-                    dimensionZ : containerSpace.dimensionZ,
-                    volume : freeSpace.dimensionX*fillSpace.dimensionY*containerSpace.dimensionZ
-                },
-                sideFreeSpace : {
-                    name : 'sideFreeSpace',
-                    dimensionX : containerSpace.dimensionX,
-                    dimensionY : freeSpace.dimensionY,
-                    dimensionZ : containerSpace.dimensionZ,
-                    volume : containerSpace.dimensionX*freeSpace.dimensionY*containerSpace.dimensionZ
-                },
-                topFreeSpace : {
-                    name : 'topFreeSpace',
-                    dimensionX : fillSpace.dimensionX,
-                    dimensionY : fillSpace.dimensionY,
-                    dimensionZ : freeSpace.dimensionZ,
-                    volume : fillSpace.dimensionX*fillSpace.dimensionY*freeSpace.dimensionZ
-                }
-            }
-        ];
-        waysList = [
-            theBox.way1,
-            theBox.way2
-        ];
-    }
-    if (rule == "rule5") { // définir containersList et waysList
-        containersList = [
-            firstFaceSideTop = { // FST
-                name : 'firstFaceSideTop',
-                faceFreeSpace : {
-                    name : "faceFreeSpace",
-                    dimensionX : freeSpace.dimensionX,
-                    dimensionY : containerSpace.dimensionY,
-                    dimensionZ : containerSpace.dimensionZ,
-                    volume : freeSpace.dimensionX*containerSpace.dimensionY*containerSpace.dimensionZ
-                },
-                sideFreeSpace : {
-                    name : "sideFreeSpace",
-                    dimensionX : fillSpace.dimensionX,
-                    dimensionY : freeSpace.dimensionY,
-                    dimensionZ : containerSpace.dimensionZ,
-                    volume : fillSpace.dimensionX*freeSpace.dimensionY*containerSpace.dimensionZ
-                },
-                topFreeSpace : {
-                    name : "topFreeSpace",
-                    dimensionX : fillSpace.dimensionX,
-                    dimensionY : fillSpace.dimensionY,
-                    dimensionZ : freeSpace.dimensionZ,
-                    volume : fillSpace.dimensionX*fillSpace.dimensionY*freeSpace.dimensionZ
-                }
-            },
-            firstFaceTopSide = { // FTS
-                name : 'firstFaceTopSide',
-                faceFreeSpace : {
-                    name : "faceFreeSpace",
-                    dimensionX : freeSpace.dimensionX,
-                    dimensionY : containerSpace.dimensionY,
-                    dimensionZ : containerSpace.dimensionZ,
-                    volume : freeSpace.dimensionX*containerSpace.dimensionY*containerSpace.dimensionZ
-                },
-                sideFreeSpace : {
-                    name : 'sideFreeSpace',
-                    dimensionX : fillSpace.dimensionX,
-                    dimensionY : freeSpace.dimensionY,
-                    dimensionZ : fillSpace.dimensionZ,
-                    volume : fillSpace.dimensionX*freeSpace.dimensionY*fillSpace.dimensionZ
-                },
-                topFreeSpace : {
-                    name : 'topFreeSpace',
-                    dimensionX : fillSpace.dimensionX,
-                    dimensionY : containerSpace.dimensionY,
-                    dimensionZ : freeSpace.dimensionZ,
-                    volume : fillSpace.dimensionX*containerSpace.dimensionY*freeSpace.dimensionZ
-                }
-            },
-            firstSideFaceTop = { // SFT
-                name : 'firstSideFaceTop',
-                faceFreeSpace : {
-                    name : 'faceFreeSpace',
-                    dimensionX : freeSpace.dimensionX,
-                    dimensionY : fillSpace.dimensionY,
-                    dimensionZ : containerSpace.dimensionZ,
-                    volume : freeSpace.dimensionX*fillSpace.dimensionY*containerSpace.dimensionZ
-                },
-                sideFreeSpace : {
-                    name : 'sideFreeSpace',
-                    dimensionX : containerSpace.dimensionX,
-                    dimensionY : freeSpace.dimensionY,
-                    dimensionZ : containerSpace.dimensionZ,
-                    volume : containerSpace.dimensionX*freeSpace.dimensionY*containerSpace.dimensionZ
-                },
-                topFreeSpace : {
-                    name : 'topFreeSpace',
-                    dimensionX : fillSpace.dimensionX,
-                    dimensionY : fillSpace.dimensionY,
-                    dimensionZ : freeSpace.dimensionZ,
-                    volume : fillSpace.dimensionX*fillSpace.dimensionY*freeSpace.dimensionZ
-                }
-            },
-            firstSideTopFace = { // STF
-                name : 'firsSideFaceTop',
-                faceFreeSpace : {
-                    name : 'faceFreeSpace',
-                    dimensionX : freeSpace.dimensionX,
-                    dimensionY : fillSpace.dimensionY,
-                    dimensionZ : fillSpace.dimensionZ,
-                    volume : freeSpace.dimensionX*fillSpace.dimensionY*fillSpace.dimensionZ
-                },
-                sideFreeSpace : {
-                    name : 'sideFreeSpace',
-                    dimensionX : containerSpace.dimensionX,
-                    dimensionY : freeSpace.dimensionY,
-                    dimensionZ : containerSpace.dimensionZ,
-                    volume : containerSpace.dimensionX*freeSpace.dimensionY*containerSpace.dimensionZ
-                },
-                topFreeSpace : {
-                    name : 'topFreeSpace',
-                    dimensionX : containerSpace.dimensionX,
-                    dimensionY : fillSpace.dimensionY,
-                    dimensionZ : freeSpace.dimensionZ,
-                    volume : containerSpace.dimensionX*fillSpace.dimensionY*freeSpace.dimensionZ
-                }
-            },
-            firstTopFaceSide = { // TFS
-                name : 'firstTopFaceSide',
-                faceFreeSpace : {
-                    name : 'faceFreeSpace',
-                    dimensionX : freeSpace.dimensionX,
-                    dimensionY : containerSpace.dimensionY,
-                    dimensionZ : fillSpace.dimensionZ,
-                    volume : freeSpace.dimensionX*containerSpace.dimensionY*fillSpace.dimensionZ
-                },
-                sideFreeSpace : {
-                    name : 'sideFreeSpace',
-                    dimensionX : fillSpace.dimensionX,
-                    dimensionY : freeSpace.dimensionY,
-                    dimensionZ : fillSpace.dimensionZ,
-                    volume : fillSpace.dimensionX*freeSpace.dimensionY*fillSpace.dimensionZ
-                },
-                topFreeSpace : {
-                    name : 'topFreeSpace',
-                    dimensionX : containerSpace.dimensionX,
-                    dimensionY : containerSpace.dimensionY,
-                    dimensionZ : freeSpace.dimensionZ,
-                    volume : containerSpace.dimensionX*containerSpace.dimensionY*freeSpace.dimensionZ
-                }
-            },
-            firstTopSideFace = { // TSF
-                name : 'firstTopSideFace',
-                faceFreeSpace : {
-                    name : 'faceFreeSpace',
-                    dimensionX : freeSpace.dimensionX,
-                    dimensionY : containerSpace.dimensionY,
-                    dimensionZ : fillSpace.dimensionZ,
-                    volume : freeSpace.dimensionX*containerSpace.dimensionY*fillSpace.dimensionZ
-                },
-                sideFreeSpace : {
-                    name : 'sideFreeSpace',
-                    dimensionX : fillSpace.dimensionX,
-                    dimensionY : freeSpace.dimensionY,
-                    dimensionZ : fillSpace.dimensionZ,
-                    volume : fillSpace.dimensionX*freeSpace.dimensionY*fillSpace.dimensionZ
-                },
-                topFreeSpace : {
-                    name : 'topFreeSpace',
-                    dimensionX : containerSpace.dimensionX,
-                    dimensionY : containerSpace.dimensionY,
-                    dimensionZ : freeSpace.dimensionZ,
-                    volume : containerSpace.dimensionX*containerSpace.dimensionY*freeSpace.dimensionZ
-                }
-            }
-        ];
-        waysList = [
-            theBox.way1,
-            theBox.way2,
-            theBox.way3,
-            theBox.way4,
-            theBox.way5,
-            theBox.way6
-        ];
-    }
-    containersList.forEach(container => {
-        let faceSpace = tryWaysListTournement(tryWaysList(container.faceFreeSpace,waysList));
-        let sideSpace = tryWaysListTournement(tryWaysList(container.sideFreeSpace,waysList));
-        let topSpace = tryWaysListTournement(tryWaysList(container.topFreeSpace,waysList));
-        listOfChooses.push([theBoard,faceSpace,sideSpace,topSpace]);
-    });
-    let biggestList = [];
-    listOfChooses.forEach(element => {
-        biggestList.push(element[0].totalQuantity + element[1].totalQuantity + element[2].totalQuantity + element[3].totalQuantity);
-    });
-    let theBiggestQuantity = Math.max(...biggestList);
-    let result;
-    for (let index = listOfChooses.length-1; index >= 0; index--) {
-        const element = listOfChooses[index];
-            if ((element[0].totalQuantity + element[1].totalQuantity + element[2].totalQuantity + element[3].totalQuantity) == theBiggestQuantity) {
-            result = element;
-        }
-    };
-    return result;
-}
-function tryWaysList(theContainer,waysList) {
-    console.log("RUN tryWaysList");
-    let tryWayListResult = [];
-    waysList.forEach(elementWaysList => {
-        tryWayListResult.push(calculBoard(theContainer,elementWaysList));           
-    });
-    // console.log("RETURN", tryWayListResult);
-    return tryWayListResult;
-}
-function tryWaysListTournement(list) {
-    // console.log("hello tryWaysListTournement");
-    // console.log("list 527", list);
-    let listOfTotalQuantity = [];
-    let biggestTotalQuantity;
-    let result;
-    list.forEach(element => {listOfTotalQuantity.push(element.totalQuantity);});
-    biggestTotalQuantity = Math.max(...listOfTotalQuantity);
-    // console.log("listOfTotalQuantity 532", listOfTotalQuantity);
-    // console.log("biggestTotalQuantity 533", biggestTotalQuantity);
-    for (let index = list.length-1; index >= 0; index--) {
-        const element = list[index].totalQuantity;
-        // console.log("element 537", element, "index 537", index ,"list[index]" , list[index]);
-        if (element == biggestTotalQuantity) {
-            result = list[index];
-        }
-    }
-    // console.log("result 541", result);
-    return result;
-}
-
-// Function : exclude values smaller than or equal to 0 and replace them with 0.001.
-function valueZeroAndSmaller() {
-    if (cardboardInteriorSpaceDimensionX.value <= 0 || cardboardInteriorSpaceDimensionX.value == undefined) {
-        cardboardInteriorSpaceDimensionX.value = 0.001; 
-    }
-    if (cardboardInteriorSpaceDimensionY.value <= 0 || cardboardInteriorSpaceDimensionY.value == undefined) {
-        cardboardInteriorSpaceDimensionY.value = 0.001; 
-    }
-    if (cardboardInteriorSpaceDimensionZ.value <= 0 || cardboardInteriorSpaceDimensionZ.value == undefined) {
-        cardboardInteriorSpaceDimensionZ.value = 0.001; 
-    }
-    if (boxSideWidthDimensionA.value <= 0 || boxSideWidthDimensionA.value == undefined) {
-        boxSideWidthDimensionA.value = 0.001; 
-    }
-    if (boxFrontWidthDimensionB.value <= 0 || boxFrontWidthDimensionB.value == undefined) {
-        boxFrontWidthDimensionB.value = 0.001; 
-    }
-    if (boxHeightDimensionC.value <= 0 || boxHeightDimensionC.value == undefined) {
-        boxHeightDimensionC.value = 0.001; 
-    }
-}
-
-// _,;:!!:;,_ PROGRAMMING _,;:!!:;,_
-
-// calculateButton - => Start the calcul
-calculateButton.addEventListener('click', () => 
-{   // console.log("RUN caculateButton");
-    valueZeroAndSmaller()
+calculateButton.addEventListener('click', () => { // Start the process
+    Calculator.valueZeroAndSmaller()
     theCardboardBox = new Container('theCardboardBox', cardboardInteriorSpaceDimensionX.value, cardboardInteriorSpaceDimensionY.value, cardboardInteriorSpaceDimensionZ.value);
     theBox = new Inner('theBox', boxSideWidthDimensionA.value, boxFrontWidthDimensionB.value, boxHeightDimensionC.value);
-    // console.log('theCardboardBox',theCardboardBox,'theBox',theBox);
-    calculator();
-    // console.log("THE END caculateButton");
-});
-
-function calculator() {
     if (rule1.checked) { // "Boxes stacked in the initial sense" : Test way1.
-        console.log("RUN calculator.rule1.checked");
-        calculRule1()
+        Calculator.calculForRule1();
     } else
     if (rule2.checked) { // "Boxes upright, stacked in the same direction" : Test way1, way2.
-        console.log("RUN calculator.rule2.checked");
-        calculRule2()
+        Calculator.calculForRule2();
     } else 
     if (rule3.checked) { // "Boxes upright, fill all the spaces with boxes in the next way" : Test way1++, way2++.
-        console.log("RUN calculator.rule3.checked");
-        calculRule3();   
+        Calculator.calculForRule3();   
     }
     if (rule4.checked) { // "All the possibilities, stacked in the same direction" : Test way1, way2, way3, way5, way6.
-        console.log("RUN calculator.rule4.checked");
-        calculRule4();   
+        Calculator.calculForRule4();   
     }
     if (rule5.checked) { // "All the possibilities, fill all the spaces with boxes in any direction" : Test way1++, way2++, way3++, way5++, way6++.
-        console.log("RUN calculator.rule5.checked");
-        calculRule5();   
+        Calculator.calculForRule5();   
+    }
+});
+
+const Calculator = { // Call a calcul function
+    calculForRule1 : function() {
+        resultRule1 = loadResultRule1(Calculator.calculBoard(theCardboardBox,theBox.way1));
+        resultRule1.letsPrint();
+
+        function loadResultRule1(theBoardToPrint) {
+            let quantityInCenter = theBoardToPrint.totalQuantity;
+            let senseInCenter = theBoardToPrint.reference.substr(theBoardToPrint.reference.length - 4);
+            let quantityInFront = 0;
+            let senseInFront = "__";
+            let quantityInSide = 0;
+            let senseInSide = "__";
+            let quantityInTop = 0;
+            let senseInTop = "__"; 
+            let totalOfQuantities = quantityInCenter;
+            let totalVolumePercent =  +(((Math.ceil((theBoardToPrint.volumeFilling/theBoardToPrint.volumeContainer)*10000))/100).toFixed(2)) + "%";
+            return new TheBoardToPrint (quantityInCenter,senseInCenter,  quantityInFront,senseInFront,  quantityInSide,senseInSide,  quantityInTop,senseInTop,  totalOfQuantities,totalVolumePercent);
+        } 
+    },
+    calculForRule2 : function() {
+        let selectList = [];
+        selectList.push(Calculator.calculBoard(theCardboardBox,theBox.way1));
+        selectList.push(Calculator.calculBoard(theCardboardBox,theBox.way2));
+        if (selectList[0].totalQuantity >= selectList[1].totalQuantity) { // choose way1
+            resultRule2 = loadResultRule2(selectList[0]); 
+        } else { // choose way2
+            resultRule2 = loadResultRule2(selectList[1]);
+        }
+        resultRule2.letsPrint();
+    
+        function loadResultRule2(theBoardToPrint) {
+            let quantityInCenter = theBoardToPrint.totalQuantity;
+            let senseInCenter = theBoardToPrint.reference.substr(theBoardToPrint.reference.length - 4);
+            let quantityInFront = 0;
+            let senseInFront = "__";
+            let quantityInSide = 0;
+            let senseInSide = "__";
+            let quantityInTop = 0;
+            let senseInTop = "__"; 
+            let totalOfQuantities = quantityInCenter;
+            let totalVolumePercent =  +(((Math.ceil((theBoardToPrint.volumeFilling/theBoardToPrint.volumeContainer)*10000))/100).toFixed(2)) + "%";
+            return new TheBoardToPrint (quantityInCenter,senseInCenter,  quantityInFront,senseInFront,  quantityInSide,senseInSide,  quantityInTop,senseInTop,  totalOfQuantities,totalVolumePercent);
+        }
+    },
+    calculForRule3 : function() {
+        let selectList = [];
+        let waysList = [theBox.way1,theBox.way2];
+        waysList.forEach(way => {
+            let theBoardRule3 = Calculator.calculBoard(theCardboardBox,way);
+            selectList.push(Calculator.fillingTournement(theBoardRule3, "rule3"))
+        });
+        //model
+        let biggestList = [];
+        selectList.forEach(element => {
+            biggestList.push(element[0].totalQuantity + element[1].totalQuantity + element[2].totalQuantity + element[3].totalQuantity);
+        });
+        let theBiggestQuantity = Math.max(...biggestList);
+        let result;
+        for (let index = selectList.length-1; index >= 0; index--) {
+            const element = selectList[index];
+                if ((element[0].totalQuantity + element[1].totalQuantity + element[2].totalQuantity + element[3].totalQuantity) == theBiggestQuantity) {
+                result = element;
+            }
+        };
+        resultRule3 = loadResultRule3(result);
+        resultRule3.letsPrint();
+    
+        function loadResultRule3(result) {
+            let quantityInCenter = result[0].totalQuantity;
+            let senseInCenter = result[0].reference.substr(result[0].reference.length - 4);
+            let quantityInFront = result[1].totalQuantity;
+            let senseInFront = result[1].reference.substr(result[1].reference.length - 4);
+            if (quantityInFront == 0) {senseInFront = "__";}
+            let quantityInSide = result[2].totalQuantity;
+            let senseInSide = result[2].reference.substr(result[2].reference.length - 4);
+            if (quantityInSide == 0) {senseInSide = "__";}
+            let quantityInTop = result[3].totalQuantity;
+            let senseInTop = result[3].reference.substr(result[3].reference.length - 4);
+            if (quantityInTop == 0) {senseInTop = "__";}
+            let totalOfQuantities = quantityInCenter + quantityInFront + quantityInSide + quantityInTop;
+            let totalVolumePercent =  +(((Math.ceil(((result[0].volumeFilling + result[1].volumeFilling + result[2].volumeFilling + result[3].volumeFilling)/result[0].volumeContainer)*10000))/100).toFixed(2)) + "%";
+            return new TheBoardToPrint (quantityInCenter,senseInCenter,  quantityInFront,senseInFront,  quantityInSide,senseInSide,  quantityInTop,senseInTop,  totalOfQuantities,totalVolumePercent);
+        }
+    },
+    calculForRule4 : function() {
+        let selectList = [];
+        let waysList = [theBox.way1,theBox.way2,theBox.way3,theBox.way4,theBox.way5,theBox.way6];
+        waysList.forEach(way => {
+            let theBoardRule4 = Calculator.calculBoard(theCardboardBox,way);
+            selectList.push(theBoardRule4)
+        });
+        let biggestList = [];
+        selectList.forEach(element => {
+            biggestList.push(element.totalQuantity);
+        });
+        let theBiggestQuantity = Math.max(...biggestList);
+        let result;
+        for (let index = selectList.length-1; index >= 0; index--) {
+            const element = selectList[index];
+                if (element.totalQuantity == theBiggestQuantity) {
+                result = element;
+            }
+        };
+        resultRule4 = loadResultRule4(result);
+        resultRule4.letsPrint();
+    
+        function loadResultRule4(theBoardToPrint) {
+            let quantityInCenter = theBoardToPrint.totalQuantity;
+            let senseInCenter = theBoardToPrint.reference.substr(theBoardToPrint.reference.length - 4);
+            let quantityInFront = 0;
+            let senseInFront = "__";
+            let quantityInSide = 0;
+            let senseInSide = "__";
+            let quantityInTop = 0;
+            let senseInTop = "__"; 
+            let totalOfQuantities = quantityInCenter;
+            let totalVolumePercent =  +(((Math.ceil((theBoardToPrint.volumeFilling/theBoardToPrint.volumeContainer)*10000))/100).toFixed(2)) + "%";
+            return new TheBoardToPrint (quantityInCenter,senseInCenter,  quantityInFront,senseInFront,  quantityInSide,senseInSide,  quantityInTop,senseInTop,  totalOfQuantities,totalVolumePercent);
+        }
+    },
+    calculForRule5 : function() {
+        let selectList = [];
+        let waysList = [theBox.way1,theBox.way2,theBox.way3,theBox.way4,theBox.way5,theBox.way6];
+        waysList.forEach(way => {
+            let theBoardRule5 = Calculator.calculBoard(theCardboardBox,way);
+            selectList.push(Calculator.fillingTournement(theBoardRule5, "rule5"))
+        });
+        let biggestList = [];
+        selectList.forEach(element => {
+            biggestList.push(element[0].totalQuantity + element[1].totalQuantity + element[2].totalQuantity + element[3].totalQuantity);
+        });
+        let theBiggestQuantity = Math.max(...biggestList);
+        let result;
+        for (let index = selectList.length-1; index >= 0; index--) {
+            const element = selectList[index];
+                if ((element[0].totalQuantity + element[1].totalQuantity + element[2].totalQuantity + element[3].totalQuantity) == theBiggestQuantity) {
+                result = element;
+            }
+        };
+        resultRule5 = loadResultRule5(result);
+        resultRule5.letsPrint();
+    
+        function loadResultRule5(result) {
+            let quantityInCenter = result[0].totalQuantity;
+            let senseInCenter = result[0].reference.substr(result[0].reference.length - 4);
+            let quantityInFront = result[1].totalQuantity;
+            let senseInFront = result[1].reference.substr(result[1].reference.length - 4);
+            if (quantityInFront == 0) {senseInFront = "__";}
+            let quantityInSide = result[2].totalQuantity;
+            let senseInSide = result[2].reference.substr(result[2].reference.length - 4);
+            if (quantityInSide == 0) {senseInSide = "__";}
+            let quantityInTop = result[3].totalQuantity;
+            let senseInTop = result[3].reference.substr(result[3].reference.length - 4);
+            if (quantityInTop == 0) {senseInTop = "__";}
+            let totalOfQuantities = quantityInCenter + quantityInFront + quantityInSide + quantityInTop;
+            let totalVolumePercent =  +(((Math.ceil(((result[0].volumeFilling + result[1].volumeFilling + result[2].volumeFilling + result[3].volumeFilling)/result[0].volumeContainer)*10000))/100).toFixed(2)) + "%";
+            return new TheBoardToPrint (quantityInCenter,senseInCenter,  quantityInFront,senseInFront,  quantityInSide,senseInSide,  quantityInTop,senseInTop,  totalOfQuantities,totalVolumePercent);
+        }
+    },
+    valueZeroAndSmaller : function () { // Function : exclude values smaller than or equal to 0 and replace them with 0.001.
+        if (cardboardInteriorSpaceDimensionX.value <= 0 || cardboardInteriorSpaceDimensionX.value == undefined) {
+            cardboardInteriorSpaceDimensionX.value = 0.001; 
+        }
+        if (cardboardInteriorSpaceDimensionY.value <= 0 || cardboardInteriorSpaceDimensionY.value == undefined) {
+            cardboardInteriorSpaceDimensionY.value = 0.001; 
+        }
+        if (cardboardInteriorSpaceDimensionZ.value <= 0 || cardboardInteriorSpaceDimensionZ.value == undefined) {
+            cardboardInteriorSpaceDimensionZ.value = 0.001; 
+        }
+        if (boxSideWidthDimensionA.value <= 0 || boxSideWidthDimensionA.value == undefined) {
+            boxSideWidthDimensionA.value = 0.001; 
+        }
+        if (boxFrontWidthDimensionB.value <= 0 || boxFrontWidthDimensionB.value == undefined) {
+            boxFrontWidthDimensionB.value = 0.001; 
+        }
+        if (boxHeightDimensionC.value <= 0 || boxHeightDimensionC.value == undefined) {
+            boxHeightDimensionC.value = 0.001; 
+        }
+    },
+    calculBoard : function (theContainer,theInnerBox) { // Load TheBoard
+        if (theContainer.dimensionX < theInnerBox.dimensionX || theContainer.dimensionY < theInnerBox.dimensionY || theContainer.dimensionZ < theInnerBox.dimensionZ) {
+            // Fail Calcul Board
+            TheBoard = {};
+            TheBoard.reference = theContainer.name + " - " + theInnerBox.name;
+            TheBoard.quantityOFlawX = 0;
+            TheBoard.quantityOFlawY = 0;
+            TheBoard.quantityOFlawZ = 0;
+            TheBoard.totalQuantity = 0;
+            TheBoard.containerSpace = {
+                name : "containerSpace",
+                dimensionX : theContainer.dimensionX,
+                dimensionY : theContainer.dimensionY,
+                dimensionZ : theContainer.dimensionZ,
+                volume : theContainer.volume        
+            };
+            TheBoard.fillSpace = {
+                name : 'fillSpace',
+                    dimensionX : 0,
+                    dimensionY : 0,
+                    dimensionZ : 0,
+                    volume : 0
+            };
+            TheBoard.freeSpace = {
+                name : 'freeSpace',
+                    dimensionX : 0,
+                    dimensionY : 0,
+                    dimensionZ : 0,
+                    volume : 0
+            };
+            TheBoard.volumeContainer = theContainer.volume;
+            TheBoard.volumeFilling = 0;
+            TheBoard.percentageOfVolumeFilling = 0;
+        } else { // Calcul Board
+            let reference = theContainer.name + " - " + theInnerBox.name;
+            let quantityOFlawX = Math.floor (theContainer.dimensionX / theInnerBox.dimensionX);
+            let quantityOFlawY = Math.floor (theContainer.dimensionY / theInnerBox.dimensionY);
+            let quantityOFlawZ = Math.floor (theContainer.dimensionZ / theInnerBox.dimensionZ);
+            let totalQuantity = quantityOFlawX * quantityOFlawY * quantityOFlawZ;
+            let fillSpace = {
+                name : 'fillSpace',
+                    dimensionX : theInnerBox.dimensionX * quantityOFlawX,
+                    dimensionY : theInnerBox.dimensionY * quantityOFlawY,
+                    dimensionZ : theInnerBox.dimensionZ * quantityOFlawZ,
+                    volume : (theInnerBox.dimensionX * quantityOFlawX)*(theInnerBox.dimensionY * quantityOFlawY)*(theInnerBox.dimensionZ * quantityOFlawZ)
+            };
+            let freeSpace = {
+                name : 'freeSpace',
+                    dimensionX : theContainer.dimensionX - fillSpace.dimensionX,
+                    dimensionY : theContainer.dimensionY - fillSpace.dimensionY,
+                    dimensionZ : theContainer.dimensionZ - fillSpace.dimensionZ,
+                    volume : (theContainer.dimensionX - fillSpace.dimensionX) * (theContainer.dimensionY - fillSpace.dimensionY) * (theContainer.dimensionZ - fillSpace.dimensionZ)
+            };
+            let volumeFilling = theInnerBox.volume * totalQuantity;
+            let percentageOfVolumeFilling = +(((Math.ceil(((theInnerBox.volume * totalQuantity)/theContainer.volume)*10000))/100).toFixed(2));
+    
+            TheBoard = {};
+            TheBoard.reference = reference,
+            TheBoard.quantityOFlawX = quantityOFlawX,
+            TheBoard.quantityOFlawY = quantityOFlawY,
+            TheBoard.quantityOFlawZ = quantityOFlawZ,
+            TheBoard.totalQuantity = totalQuantity,
+            TheBoard.containerSpace = {
+                name : "containerSpace",
+                dimensionX : theContainer.dimensionX,
+                dimensionY : theContainer.dimensionY,
+                dimensionZ : theContainer.dimensionZ,
+                volume : theContainer.volume        
+            };
+            TheBoard.fillSpace = fillSpace,
+            TheBoard.freeSpace = freeSpace
+            TheBoard.volumeContainer = theContainer.volume;
+            TheBoard.volumeFilling = volumeFilling;
+            TheBoard.percentageOfVolumeFilling = percentageOfVolumeFilling;
+        }
+        return TheBoard;
+    },
+    fillingTournement : function (theBoard, rule) { // try all posibility to stack a group of boxes in a container 
+        let containerSpace = TheBoard.containerSpace;
+        let fillSpace = TheBoard.fillSpace;
+        let freeSpace = TheBoard.freeSpace;
+        
+        let containersList;
+        let waysList;
+        let listOfChooses = [];
+        if (rule == "rule3") { // define the containersList and the waysList for the rule3
+            containersList = [
+                firstFaceSideTop = { // FST
+                    name : 'firstFaceSideTop',
+                    faceFreeSpace : {
+                        name : "faceFreeSpace",
+                        dimensionX : freeSpace.dimensionX,
+                        dimensionY : containerSpace.dimensionY,
+                        dimensionZ : containerSpace.dimensionZ,
+                        volume : freeSpace.dimensionX * containerSpace.dimensionY*containerSpace.dimensionZ
+                    },
+                    sideFreeSpace : {
+                        name : "sideFreeSpace",
+                        dimensionX : fillSpace.dimensionX,
+                        dimensionY : freeSpace.dimensionY,
+                        dimensionZ : containerSpace.dimensionZ,
+                        volume : fillSpace.dimensionX*freeSpace.dimensionY*containerSpace.dimensionZ
+                    },
+                    topFreeSpace : {
+                        name : "topFreeSpace",
+                        dimensionX : fillSpace.dimensionX,
+                        dimensionY : fillSpace.dimensionY,
+                        dimensionZ : freeSpace.dimensionZ,
+                        volume : fillSpace.dimensionX*fillSpace.dimensionY*freeSpace.dimensionZ
+                    }
+                },
+                firstSideFaceTop = { // SFT
+                    name : 'firstSideFaceTop',
+                    faceFreeSpace : {
+                        name : 'faceFreeSpace',
+                        dimensionX : freeSpace.dimensionX,
+                        dimensionY : fillSpace.dimensionY,
+                        dimensionZ : containerSpace.dimensionZ,
+                        volume : freeSpace.dimensionX*fillSpace.dimensionY*containerSpace.dimensionZ
+                    },
+                    sideFreeSpace : {
+                        name : 'sideFreeSpace',
+                        dimensionX : containerSpace.dimensionX,
+                        dimensionY : freeSpace.dimensionY,
+                        dimensionZ : containerSpace.dimensionZ,
+                        volume : containerSpace.dimensionX*freeSpace.dimensionY*containerSpace.dimensionZ
+                    },
+                    topFreeSpace : {
+                        name : 'topFreeSpace',
+                        dimensionX : fillSpace.dimensionX,
+                        dimensionY : fillSpace.dimensionY,
+                        dimensionZ : freeSpace.dimensionZ,
+                        volume : fillSpace.dimensionX*fillSpace.dimensionY*freeSpace.dimensionZ
+                    }
+                }
+            ];
+            waysList = [
+                theBox.way1,
+                theBox.way2
+            ];
+        }
+        if (rule == "rule5") { // define the containersList and the waysList for the rule5
+            containersList = [
+                firstFaceSideTop = { // FST
+                    name : 'firstFaceSideTop',
+                    faceFreeSpace : {
+                        name : "faceFreeSpace",
+                        dimensionX : freeSpace.dimensionX,
+                        dimensionY : containerSpace.dimensionY,
+                        dimensionZ : containerSpace.dimensionZ,
+                        volume : freeSpace.dimensionX*containerSpace.dimensionY*containerSpace.dimensionZ
+                    },
+                    sideFreeSpace : {
+                        name : "sideFreeSpace",
+                        dimensionX : fillSpace.dimensionX,
+                        dimensionY : freeSpace.dimensionY,
+                        dimensionZ : containerSpace.dimensionZ,
+                        volume : fillSpace.dimensionX*freeSpace.dimensionY*containerSpace.dimensionZ
+                    },
+                    topFreeSpace : {
+                        name : "topFreeSpace",
+                        dimensionX : fillSpace.dimensionX,
+                        dimensionY : fillSpace.dimensionY,
+                        dimensionZ : freeSpace.dimensionZ,
+                        volume : fillSpace.dimensionX*fillSpace.dimensionY*freeSpace.dimensionZ
+                    }
+                },
+                firstFaceTopSide = { // FTS
+                    name : 'firstFaceTopSide',
+                    faceFreeSpace : {
+                        name : "faceFreeSpace",
+                        dimensionX : freeSpace.dimensionX,
+                        dimensionY : containerSpace.dimensionY,
+                        dimensionZ : containerSpace.dimensionZ,
+                        volume : freeSpace.dimensionX*containerSpace.dimensionY*containerSpace.dimensionZ
+                    },
+                    sideFreeSpace : {
+                        name : 'sideFreeSpace',
+                        dimensionX : fillSpace.dimensionX,
+                        dimensionY : freeSpace.dimensionY,
+                        dimensionZ : fillSpace.dimensionZ,
+                        volume : fillSpace.dimensionX*freeSpace.dimensionY*fillSpace.dimensionZ
+                    },
+                    topFreeSpace : {
+                        name : 'topFreeSpace',
+                        dimensionX : fillSpace.dimensionX,
+                        dimensionY : containerSpace.dimensionY,
+                        dimensionZ : freeSpace.dimensionZ,
+                        volume : fillSpace.dimensionX*containerSpace.dimensionY*freeSpace.dimensionZ
+                    }
+                },
+                firstSideFaceTop = { // SFT
+                    name : 'firstSideFaceTop',
+                    faceFreeSpace : {
+                        name : 'faceFreeSpace',
+                        dimensionX : freeSpace.dimensionX,
+                        dimensionY : fillSpace.dimensionY,
+                        dimensionZ : containerSpace.dimensionZ,
+                        volume : freeSpace.dimensionX*fillSpace.dimensionY*containerSpace.dimensionZ
+                    },
+                    sideFreeSpace : {
+                        name : 'sideFreeSpace',
+                        dimensionX : containerSpace.dimensionX,
+                        dimensionY : freeSpace.dimensionY,
+                        dimensionZ : containerSpace.dimensionZ,
+                        volume : containerSpace.dimensionX*freeSpace.dimensionY*containerSpace.dimensionZ
+                    },
+                    topFreeSpace : {
+                        name : 'topFreeSpace',
+                        dimensionX : fillSpace.dimensionX,
+                        dimensionY : fillSpace.dimensionY,
+                        dimensionZ : freeSpace.dimensionZ,
+                        volume : fillSpace.dimensionX*fillSpace.dimensionY*freeSpace.dimensionZ
+                    }
+                },
+                firstSideTopFace = { // STF
+                    name : 'firsSideFaceTop',
+                    faceFreeSpace : {
+                        name : 'faceFreeSpace',
+                        dimensionX : freeSpace.dimensionX,
+                        dimensionY : fillSpace.dimensionY,
+                        dimensionZ : fillSpace.dimensionZ,
+                        volume : freeSpace.dimensionX*fillSpace.dimensionY*fillSpace.dimensionZ
+                    },
+                    sideFreeSpace : {
+                        name : 'sideFreeSpace',
+                        dimensionX : containerSpace.dimensionX,
+                        dimensionY : freeSpace.dimensionY,
+                        dimensionZ : containerSpace.dimensionZ,
+                        volume : containerSpace.dimensionX*freeSpace.dimensionY*containerSpace.dimensionZ
+                    },
+                    topFreeSpace : {
+                        name : 'topFreeSpace',
+                        dimensionX : containerSpace.dimensionX,
+                        dimensionY : fillSpace.dimensionY,
+                        dimensionZ : freeSpace.dimensionZ,
+                        volume : containerSpace.dimensionX*fillSpace.dimensionY*freeSpace.dimensionZ
+                    }
+                },
+                firstTopFaceSide = { // TFS
+                    name : 'firstTopFaceSide',
+                    faceFreeSpace : {
+                        name : 'faceFreeSpace',
+                        dimensionX : freeSpace.dimensionX,
+                        dimensionY : containerSpace.dimensionY,
+                        dimensionZ : fillSpace.dimensionZ,
+                        volume : freeSpace.dimensionX*containerSpace.dimensionY*fillSpace.dimensionZ
+                    },
+                    sideFreeSpace : {
+                        name : 'sideFreeSpace',
+                        dimensionX : fillSpace.dimensionX,
+                        dimensionY : freeSpace.dimensionY,
+                        dimensionZ : fillSpace.dimensionZ,
+                        volume : fillSpace.dimensionX*freeSpace.dimensionY*fillSpace.dimensionZ
+                    },
+                    topFreeSpace : {
+                        name : 'topFreeSpace',
+                        dimensionX : containerSpace.dimensionX,
+                        dimensionY : containerSpace.dimensionY,
+                        dimensionZ : freeSpace.dimensionZ,
+                        volume : containerSpace.dimensionX*containerSpace.dimensionY*freeSpace.dimensionZ
+                    }
+                },
+                firstTopSideFace = { // TSF
+                    name : 'firstTopSideFace',
+                    faceFreeSpace : {
+                        name : 'faceFreeSpace',
+                        dimensionX : freeSpace.dimensionX,
+                        dimensionY : containerSpace.dimensionY,
+                        dimensionZ : fillSpace.dimensionZ,
+                        volume : freeSpace.dimensionX*containerSpace.dimensionY*fillSpace.dimensionZ
+                    },
+                    sideFreeSpace : {
+                        name : 'sideFreeSpace',
+                        dimensionX : fillSpace.dimensionX,
+                        dimensionY : freeSpace.dimensionY,
+                        dimensionZ : fillSpace.dimensionZ,
+                        volume : fillSpace.dimensionX*freeSpace.dimensionY*fillSpace.dimensionZ
+                    },
+                    topFreeSpace : {
+                        name : 'topFreeSpace',
+                        dimensionX : containerSpace.dimensionX,
+                        dimensionY : containerSpace.dimensionY,
+                        dimensionZ : freeSpace.dimensionZ,
+                        volume : containerSpace.dimensionX*containerSpace.dimensionY*freeSpace.dimensionZ
+                    }
+                }
+            ];
+            waysList = [
+                theBox.way1,
+                theBox.way2,
+                theBox.way3,
+                theBox.way4,
+                theBox.way5,
+                theBox.way6
+            ];
+        }
+        containersList.forEach(container => {
+            let faceSpace = Calculator.tryWaysListTournement(Calculator.tryWaysList(container.faceFreeSpace,waysList));
+            let sideSpace = Calculator.tryWaysListTournement(Calculator.tryWaysList(container.sideFreeSpace,waysList));
+            let topSpace = Calculator.tryWaysListTournement(Calculator.tryWaysList(container.topFreeSpace,waysList));
+            listOfChooses.push([theBoard,faceSpace,sideSpace,topSpace]);
+        });
+        let biggestList = [];
+        listOfChooses.forEach(element => {
+            biggestList.push(element[0].totalQuantity + element[1].totalQuantity + element[2].totalQuantity + element[3].totalQuantity);
+        });
+        let theBiggestQuantity = Math.max(...biggestList);
+        let result;
+        for (let index = listOfChooses.length-1; index >= 0; index--) {
+            const element = listOfChooses[index];
+                if ((element[0].totalQuantity + element[1].totalQuantity + element[2].totalQuantity + element[3].totalQuantity) == theBiggestQuantity) {
+                result = element;
+            }
+        };
+        return result;
+    },
+    tryWaysList : function (theContainer,waysList) { // in theContainer try the all the ways of the waysList
+        let tryWayListResult = [];
+        waysList.forEach(elementWaysList => {
+            tryWayListResult.push(Calculator.calculBoard(theContainer,elementWaysList));           
+        });
+        return tryWayListResult;
+    },
+    tryWaysListTournement : function (list) { // find the best score in the list
+        let listOfTotalQuantity = [];
+        let biggestTotalQuantity;
+        let result;
+        list.forEach(element => {listOfTotalQuantity.push(element.totalQuantity);});
+        biggestTotalQuantity = Math.max(...listOfTotalQuantity);
+        for (let index = list.length-1; index >= 0; index--) {
+            const element = list[index].totalQuantity;
+            if (element == biggestTotalQuantity) {
+                result = list[index];
+            }
+        }
+        return result;
     }
 }
