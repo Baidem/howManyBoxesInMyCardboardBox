@@ -200,8 +200,8 @@ class   TheBoardToPrint { // Class of the board of result - method for print the
 
 calculateButton.addEventListener('click', () => { // Start the process
     Calculator.valueZeroAndSmaller()
-    theCardboardBox = new Container('theCardboardBox', cardboardInteriorSpaceDimensionX.value, cardboardInteriorSpaceDimensionY.value, cardboardInteriorSpaceDimensionZ.value);
-    theBox = new Inner('theBox', boxSideWidthDimensionA.value, boxFrontWidthDimensionB.value, boxHeightDimensionC.value);
+    TheCardboardBox = new Container('TheCardboardBox', cardboardInteriorSpaceDimensionX.value, cardboardInteriorSpaceDimensionY.value, cardboardInteriorSpaceDimensionZ.value);
+    TheBox = new Inner('TheBox', boxSideWidthDimensionA.value, boxFrontWidthDimensionB.value, boxHeightDimensionC.value);
     if (rule1.checked) { // "Boxes stacked in the initial sense" : Test way1.
         Calculator.calculForRule1();
     } else
@@ -221,12 +221,13 @@ calculateButton.addEventListener('click', () => { // Start the process
 
 const Calculator = { // Call a calcul function
     calculForRule1 : function() {
-        resultRule1 = loadResultRule1(Calculator.calculBoard(theCardboardBox,theBox.way1));
+        resultRule1 = loadResultRule1(Calculator.calculBoard(TheCardboardBox,TheBox.way1));
         resultRule1.letsPrint();
 
         function loadResultRule1(theBoardToPrint) {
-            let quantityInCenter = theBoardToPrint.totalQuantity;
-            let senseInCenter = theBoardToPrint.reference.substr(theBoardToPrint.reference.length - 4);
+            this.theBoardToPrint = theBoardToPrint;
+            let quantityInCenter = this.theBoardToPrint.totalQuantity;
+            let senseInCenter = this.theBoardToPrint.reference.substr(this.theBoardToPrint.reference.length - 4);
             let quantityInFront = 0;
             let senseInFront = "__";
             let quantityInSide = 0;
@@ -234,14 +235,14 @@ const Calculator = { // Call a calcul function
             let quantityInTop = 0;
             let senseInTop = "__"; 
             let totalOfQuantities = quantityInCenter;
-            let totalVolumePercent =  +(((Math.ceil((theBoardToPrint.volumeFilling/theBoardToPrint.volumeContainer)*10000))/100).toFixed(2)) + "%";
+            let totalVolumePercent =  +(((Math.ceil((this.theBoardToPrint.volumeFilling/this.theBoardToPrint.volumeContainer)*10000))/100).toFixed(2)) + "%";
             return new TheBoardToPrint (quantityInCenter,senseInCenter,  quantityInFront,senseInFront,  quantityInSide,senseInSide,  quantityInTop,senseInTop,  totalOfQuantities,totalVolumePercent);
         } 
     },
     calculForRule2 : function() {
         let selectList = [];
-        selectList.push(Calculator.calculBoard(theCardboardBox,theBox.way1));
-        selectList.push(Calculator.calculBoard(theCardboardBox,theBox.way2));
+        selectList.push(Calculator.calculBoard(TheCardboardBox,TheBox.way1));
+        selectList.push(Calculator.calculBoard(TheCardboardBox,TheBox.way2));
         if (selectList[0].totalQuantity >= selectList[1].totalQuantity) { // choose way1
             resultRule2 = loadResultRule2(selectList[0]); 
         } else { // choose way2
@@ -250,8 +251,9 @@ const Calculator = { // Call a calcul function
         resultRule2.letsPrint();
     
         function loadResultRule2(theBoardToPrint) {
-            let quantityInCenter = theBoardToPrint.totalQuantity;
-            let senseInCenter = theBoardToPrint.reference.substr(theBoardToPrint.reference.length - 4);
+            this.theBoardToPrint = theBoardToPrint;
+            let quantityInCenter = this.theBoardToPrint.totalQuantity;
+            let senseInCenter = this.theBoardToPrint.reference.substr(this.theBoardToPrint.reference.length - 4);
             let quantityInFront = 0;
             let senseInFront = "__";
             let quantityInSide = 0;
@@ -259,15 +261,15 @@ const Calculator = { // Call a calcul function
             let quantityInTop = 0;
             let senseInTop = "__"; 
             let totalOfQuantities = quantityInCenter;
-            let totalVolumePercent =  +(((Math.ceil((theBoardToPrint.volumeFilling/theBoardToPrint.volumeContainer)*10000))/100).toFixed(2)) + "%";
+            let totalVolumePercent =  +(((Math.ceil((this.theBoardToPrint.volumeFilling/this.theBoardToPrint.volumeContainer)*10000))/100).toFixed(2)) + "%";
             return new TheBoardToPrint (quantityInCenter,senseInCenter,  quantityInFront,senseInFront,  quantityInSide,senseInSide,  quantityInTop,senseInTop,  totalOfQuantities,totalVolumePercent);
         }
     },
     calculForRule3 : function() {
         let selectList = [];
-        let waysList = [theBox.way1,theBox.way2];
+        let waysList = [TheBox.way1,TheBox.way2];
         waysList.forEach(way => {
-            let theBoardRule3 = Calculator.calculBoard(theCardboardBox,way);
+            let theBoardRule3 = Calculator.calculBoard(TheCardboardBox,way);
             selectList.push(Calculator.fillingTournement(theBoardRule3, "rule3"))
         });
         //model
@@ -287,27 +289,28 @@ const Calculator = { // Call a calcul function
         resultRule3.letsPrint();
     
         function loadResultRule3(result) {
-            let quantityInCenter = result[0].totalQuantity;
-            let senseInCenter = result[0].reference.substr(result[0].reference.length - 4);
-            let quantityInFront = result[1].totalQuantity;
-            let senseInFront = result[1].reference.substr(result[1].reference.length - 4);
+            this.result = result;
+            let quantityInCenter = this.result[0].totalQuantity;
+            let senseInCenter = this.result[0].reference.substr(this.result[0].reference.length - 4);
+            let quantityInFront = this.result[1].totalQuantity;
+            let senseInFront = this.result[1].reference.substr(this.result[1].reference.length - 4);
             if (quantityInFront == 0) {senseInFront = "__";}
-            let quantityInSide = result[2].totalQuantity;
-            let senseInSide = result[2].reference.substr(result[2].reference.length - 4);
+            let quantityInSide = this.result[2].totalQuantity;
+            let senseInSide = this.result[2].reference.substr(this.result[2].reference.length - 4);
             if (quantityInSide == 0) {senseInSide = "__";}
-            let quantityInTop = result[3].totalQuantity;
-            let senseInTop = result[3].reference.substr(result[3].reference.length - 4);
+            let quantityInTop = this.result[3].totalQuantity;
+            let senseInTop = this.result[3].reference.substr(this.result[3].reference.length - 4);
             if (quantityInTop == 0) {senseInTop = "__";}
             let totalOfQuantities = quantityInCenter + quantityInFront + quantityInSide + quantityInTop;
-            let totalVolumePercent =  +(((Math.ceil(((result[0].volumeFilling + result[1].volumeFilling + result[2].volumeFilling + result[3].volumeFilling)/result[0].volumeContainer)*10000))/100).toFixed(2)) + "%";
+            let totalVolumePercent =  +(((Math.ceil(((this.result[0].volumeFilling + this.result[1].volumeFilling + this.result[2].volumeFilling + this.result[3].volumeFilling)/this.result[0].volumeContainer)*10000))/100).toFixed(2)) + "%";
             return new TheBoardToPrint (quantityInCenter,senseInCenter,  quantityInFront,senseInFront,  quantityInSide,senseInSide,  quantityInTop,senseInTop,  totalOfQuantities,totalVolumePercent);
         }
     },
     calculForRule4 : function() {
         let selectList = [];
-        let waysList = [theBox.way1,theBox.way2,theBox.way3,theBox.way4,theBox.way5,theBox.way6];
+        let waysList = [TheBox.way1,TheBox.way2,TheBox.way3,TheBox.way4,TheBox.way5,TheBox.way6];
         waysList.forEach(way => {
-            let theBoardRule4 = Calculator.calculBoard(theCardboardBox,way);
+            let theBoardRule4 = Calculator.calculBoard(TheCardboardBox,way);
             selectList.push(theBoardRule4)
         });
         let biggestList = [];
@@ -326,8 +329,9 @@ const Calculator = { // Call a calcul function
         resultRule4.letsPrint();
     
         function loadResultRule4(theBoardToPrint) {
-            let quantityInCenter = theBoardToPrint.totalQuantity;
-            let senseInCenter = theBoardToPrint.reference.substr(theBoardToPrint.reference.length - 4);
+            this.theBoardToPrint = theBoardToPrint;
+            let quantityInCenter = this.theBoardToPrint.totalQuantity;
+            let senseInCenter = this.theBoardToPrint.reference.substr(this.theBoardToPrint.reference.length - 4);
             let quantityInFront = 0;
             let senseInFront = "__";
             let quantityInSide = 0;
@@ -335,15 +339,15 @@ const Calculator = { // Call a calcul function
             let quantityInTop = 0;
             let senseInTop = "__"; 
             let totalOfQuantities = quantityInCenter;
-            let totalVolumePercent =  +(((Math.ceil((theBoardToPrint.volumeFilling/theBoardToPrint.volumeContainer)*10000))/100).toFixed(2)) + "%";
+            let totalVolumePercent =  +(((Math.ceil((this.theBoardToPrint.volumeFilling/this.theBoardToPrint.volumeContainer)*10000))/100).toFixed(2)) + "%";
             return new TheBoardToPrint (quantityInCenter,senseInCenter,  quantityInFront,senseInFront,  quantityInSide,senseInSide,  quantityInTop,senseInTop,  totalOfQuantities,totalVolumePercent);
         }
     },
     calculForRule5 : function() {
         let selectList = [];
-        let waysList = [theBox.way1,theBox.way2,theBox.way3,theBox.way4,theBox.way5,theBox.way6];
+        let waysList = [TheBox.way1,TheBox.way2,TheBox.way3,TheBox.way4,TheBox.way5,TheBox.way6];
         waysList.forEach(way => {
-            let theBoardRule5 = Calculator.calculBoard(theCardboardBox,way);
+            let theBoardRule5 = Calculator.calculBoard(TheCardboardBox,way);
             selectList.push(Calculator.fillingTournement(theBoardRule5, "rule5"))
         });
         let biggestList = [];
@@ -362,19 +366,20 @@ const Calculator = { // Call a calcul function
         resultRule5.letsPrint();
     
         function loadResultRule5(result) {
-            let quantityInCenter = result[0].totalQuantity;
-            let senseInCenter = result[0].reference.substr(result[0].reference.length - 4);
-            let quantityInFront = result[1].totalQuantity;
-            let senseInFront = result[1].reference.substr(result[1].reference.length - 4);
+            this.result = result;
+            let quantityInCenter = this.result[0].totalQuantity;
+            let senseInCenter = this.result[0].reference.substr(this.result[0].reference.length - 4);
+            let quantityInFront = this.result[1].totalQuantity;
+            let senseInFront = this.result[1].reference.substr(this.result[1].reference.length - 4);
             if (quantityInFront == 0) {senseInFront = "__";}
-            let quantityInSide = result[2].totalQuantity;
-            let senseInSide = result[2].reference.substr(result[2].reference.length - 4);
+            let quantityInSide = this.result[2].totalQuantity;
+            let senseInSide = this.result[2].reference.substr(this.result[2].reference.length - 4);
             if (quantityInSide == 0) {senseInSide = "__";}
-            let quantityInTop = result[3].totalQuantity;
-            let senseInTop = result[3].reference.substr(result[3].reference.length - 4);
+            let quantityInTop = this.result[3].totalQuantity;
+            let senseInTop = this.result[3].reference.substr(this.result[3].reference.length - 4);
             if (quantityInTop == 0) {senseInTop = "__";}
             let totalOfQuantities = quantityInCenter + quantityInFront + quantityInSide + quantityInTop;
-            let totalVolumePercent =  +(((Math.ceil(((result[0].volumeFilling + result[1].volumeFilling + result[2].volumeFilling + result[3].volumeFilling)/result[0].volumeContainer)*10000))/100).toFixed(2)) + "%";
+            let totalVolumePercent =  +(((Math.ceil(((this.result[0].volumeFilling + this.result[1].volumeFilling + this.result[2].volumeFilling + this.result[3].volumeFilling)/this.result[0].volumeContainer)*10000))/100).toFixed(2)) + "%";
             return new TheBoardToPrint (quantityInCenter,senseInCenter,  quantityInFront,senseInFront,  quantityInSide,senseInSide,  quantityInTop,senseInTop,  totalOfQuantities,totalVolumePercent);
         }
     },
@@ -399,20 +404,22 @@ const Calculator = { // Call a calcul function
         }
     },
     calculBoard : function (theContainer,theInnerBox) { // Load TheBoard
-        if (theContainer.dimensionX < theInnerBox.dimensionX || theContainer.dimensionY < theInnerBox.dimensionY || theContainer.dimensionZ < theInnerBox.dimensionZ) {
+        this.theContainer = theContainer;
+        this.theInnerBox = theInnerBox;
+        if (this.theContainer.dimensionX < this.theInnerBox.dimensionX || this.theContainer.dimensionY < this.theInnerBox.dimensionY || this.theContainer.dimensionZ < this.theInnerBox.dimensionZ) {
             // Fail Calcul Board
             TheBoard = {};
-            TheBoard.reference = theContainer.name + " - " + theInnerBox.name;
+            TheBoard.reference = this.theContainer.name + " - " + this.theInnerBox.name;
             TheBoard.quantityOFlawX = 0;
             TheBoard.quantityOFlawY = 0;
             TheBoard.quantityOFlawZ = 0;
             TheBoard.totalQuantity = 0;
             TheBoard.containerSpace = {
                 name : "containerSpace",
-                dimensionX : theContainer.dimensionX,
-                dimensionY : theContainer.dimensionY,
-                dimensionZ : theContainer.dimensionZ,
-                volume : theContainer.volume        
+                dimensionX : this.theContainer.dimensionX,
+                dimensionY : this.theContainer.dimensionY,
+                dimensionZ : this.theContainer.dimensionZ,
+                volume : this.theContainer.volume        
             };
             TheBoard.fillSpace = {
                 name : 'fillSpace',
@@ -428,31 +435,31 @@ const Calculator = { // Call a calcul function
                     dimensionZ : 0,
                     volume : 0
             };
-            TheBoard.volumeContainer = theContainer.volume;
+            TheBoard.volumeContainer = this.theContainer.volume;
             TheBoard.volumeFilling = 0;
             TheBoard.percentageOfVolumeFilling = 0;
         } else { // Calcul Board
-            let reference = theContainer.name + " - " + theInnerBox.name;
-            let quantityOFlawX = Math.floor (theContainer.dimensionX / theInnerBox.dimensionX);
-            let quantityOFlawY = Math.floor (theContainer.dimensionY / theInnerBox.dimensionY);
-            let quantityOFlawZ = Math.floor (theContainer.dimensionZ / theInnerBox.dimensionZ);
+            let reference = this.theContainer.name + " - " + this.theInnerBox.name;
+            let quantityOFlawX = Math.floor (this.theContainer.dimensionX / this.theInnerBox.dimensionX);
+            let quantityOFlawY = Math.floor (this.theContainer.dimensionY / this.theInnerBox.dimensionY);
+            let quantityOFlawZ = Math.floor (this.theContainer.dimensionZ / this.theInnerBox.dimensionZ);
             let totalQuantity = quantityOFlawX * quantityOFlawY * quantityOFlawZ;
             let fillSpace = {
                 name : 'fillSpace',
-                    dimensionX : theInnerBox.dimensionX * quantityOFlawX,
-                    dimensionY : theInnerBox.dimensionY * quantityOFlawY,
-                    dimensionZ : theInnerBox.dimensionZ * quantityOFlawZ,
-                    volume : (theInnerBox.dimensionX * quantityOFlawX)*(theInnerBox.dimensionY * quantityOFlawY)*(theInnerBox.dimensionZ * quantityOFlawZ)
+                    dimensionX : this.theInnerBox.dimensionX * quantityOFlawX,
+                    dimensionY : this.theInnerBox.dimensionY * quantityOFlawY,
+                    dimensionZ : this.theInnerBox.dimensionZ * quantityOFlawZ,
+                    volume : (this.theInnerBox.dimensionX * quantityOFlawX)*(this.theInnerBox.dimensionY * quantityOFlawY)*(this.theInnerBox.dimensionZ * quantityOFlawZ)
             };
             let freeSpace = {
                 name : 'freeSpace',
-                    dimensionX : theContainer.dimensionX - fillSpace.dimensionX,
-                    dimensionY : theContainer.dimensionY - fillSpace.dimensionY,
-                    dimensionZ : theContainer.dimensionZ - fillSpace.dimensionZ,
-                    volume : (theContainer.dimensionX - fillSpace.dimensionX) * (theContainer.dimensionY - fillSpace.dimensionY) * (theContainer.dimensionZ - fillSpace.dimensionZ)
+                    dimensionX : this.theContainer.dimensionX - fillSpace.dimensionX,
+                    dimensionY : this.theContainer.dimensionY - fillSpace.dimensionY,
+                    dimensionZ : this.theContainer.dimensionZ - fillSpace.dimensionZ,
+                    volume : (this.theContainer.dimensionX - fillSpace.dimensionX) * (this.theContainer.dimensionY - fillSpace.dimensionY) * (this.theContainer.dimensionZ - fillSpace.dimensionZ)
             };
-            let volumeFilling = theInnerBox.volume * totalQuantity;
-            let percentageOfVolumeFilling = +(((Math.ceil(((theInnerBox.volume * totalQuantity)/theContainer.volume)*10000))/100).toFixed(2));
+            let volumeFilling = this.theInnerBox.volume * totalQuantity;
+            let percentageOfVolumeFilling = +(((Math.ceil(((this.theInnerBox.volume * totalQuantity)/this.theContainer.volume)*10000))/100).toFixed(2));
     
             TheBoard = {};
             TheBoard.reference = reference,
@@ -462,28 +469,30 @@ const Calculator = { // Call a calcul function
             TheBoard.totalQuantity = totalQuantity,
             TheBoard.containerSpace = {
                 name : "containerSpace",
-                dimensionX : theContainer.dimensionX,
-                dimensionY : theContainer.dimensionY,
-                dimensionZ : theContainer.dimensionZ,
-                volume : theContainer.volume        
+                dimensionX : this.theContainer.dimensionX,
+                dimensionY : this.theContainer.dimensionY,
+                dimensionZ : this.theContainer.dimensionZ,
+                volume : this.theContainer.volume        
             };
             TheBoard.fillSpace = fillSpace,
             TheBoard.freeSpace = freeSpace
-            TheBoard.volumeContainer = theContainer.volume;
+            TheBoard.volumeContainer = this.theContainer.volume;
             TheBoard.volumeFilling = volumeFilling;
             TheBoard.percentageOfVolumeFilling = percentageOfVolumeFilling;
         }
         return TheBoard;
     },
     fillingTournement : function (theBoard, rule) { // try all posibility to stack a group of boxes in a container 
-        let containerSpace = TheBoard.containerSpace;
-        let fillSpace = TheBoard.fillSpace;
-        let freeSpace = TheBoard.freeSpace;
+        this.theBoard = theBoard;
+        this.rule = rule;
+        let containerSpace = this.theBoard.containerSpace;
+        let fillSpace = this.theBoard.fillSpace;
+        let freeSpace = this.theBoard.freeSpace;
         
         let containersList;
         let waysList;
         let listOfChooses = [];
-        if (rule == "rule3") { // define the containersList and the waysList for the rule3
+        if (this.rule == "rule3") { // define the containersList and the waysList for the rule3
             containersList = [
                 firstFaceSideTop = { // FST
                     name : 'firstFaceSideTop',
@@ -535,11 +544,11 @@ const Calculator = { // Call a calcul function
                 }
             ];
             waysList = [
-                theBox.way1,
-                theBox.way2
+                TheBox.way1,
+                TheBox.way2
             ];
         }
-        if (rule == "rule5") { // define the containersList and the waysList for the rule5
+        if (this.rule == "rule5") { // define the containersList and the waysList for the rule5
             containersList = [
                 firstFaceSideTop = { // FST
                     name : 'firstFaceSideTop',
@@ -687,19 +696,19 @@ const Calculator = { // Call a calcul function
                 }
             ];
             waysList = [
-                theBox.way1,
-                theBox.way2,
-                theBox.way3,
-                theBox.way4,
-                theBox.way5,
-                theBox.way6
+                TheBox.way1,
+                TheBox.way2,
+                TheBox.way3,
+                TheBox.way4,
+                TheBox.way5,
+                TheBox.way6
             ];
         }
         containersList.forEach(container => {
             let faceSpace = Calculator.tryWaysListTournement(Calculator.tryWaysList(container.faceFreeSpace,waysList));
             let sideSpace = Calculator.tryWaysListTournement(Calculator.tryWaysList(container.sideFreeSpace,waysList));
             let topSpace = Calculator.tryWaysListTournement(Calculator.tryWaysList(container.topFreeSpace,waysList));
-            listOfChooses.push([theBoard,faceSpace,sideSpace,topSpace]);
+            listOfChooses.push([this.theBoard,faceSpace,sideSpace,topSpace]);
         });
         let biggestList = [];
         listOfChooses.forEach(element => {
@@ -716,22 +725,25 @@ const Calculator = { // Call a calcul function
         return result;
     },
     tryWaysList : function (theContainer,waysList) { // in theContainer try the all the ways of the waysList
+        this.theContainer = theContainer;
+        this.waysList = waysList;
         let tryWayListResult = [];
-        waysList.forEach(elementWaysList => {
-            tryWayListResult.push(Calculator.calculBoard(theContainer,elementWaysList));           
+        this.waysList.forEach(elementWaysList => {
+            tryWayListResult.push(Calculator.calculBoard(this.theContainer,elementWaysList));           
         });
         return tryWayListResult;
     },
     tryWaysListTournement : function (list) { // find the best score in the list
+        this.list = list;
         let listOfTotalQuantity = [];
         let biggestTotalQuantity;
         let result;
-        list.forEach(element => {listOfTotalQuantity.push(element.totalQuantity);});
+        this.list.forEach(element => {listOfTotalQuantity.push(element.totalQuantity);});
         biggestTotalQuantity = Math.max(...listOfTotalQuantity);
-        for (let index = list.length-1; index >= 0; index--) {
-            const element = list[index].totalQuantity;
+        for (let index = this.list.length-1; index >= 0; index--) {
+            const element = this.list[index].totalQuantity;
             if (element == biggestTotalQuantity) {
-                result = list[index];
+                result = this.list[index];
             }
         }
         return result;
