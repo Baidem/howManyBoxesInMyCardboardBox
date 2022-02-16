@@ -1,0 +1,19 @@
+{
+  "name": "howmanyboxesinmycardboardbox",
+  "version": "1.0.0",
+  "description": "For calculate how many boxes I can put in my cardboard box.",
+  "main": "index.js",
+  "scripts": {
+    "sass": "sass --watch ./sass/main.scss:.public/css/style.css"
+    },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Baidem/howManyBoxesInMyCardboardBox.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Baidem/howManyBoxesInMyCardboardBox/issues"
+  },
+  "homepage": "https://github.com/Baidem/howManyBoxesInMyCardboardBox#readme"
+}
