@@ -1,0 +1,49 @@
+button {
+    border-radius: 6px;
+    border-top: #003e79 solid 2px;
+    border-left: #003e79 solid 2px;
+    border-bottom: #001b35 solid 2px;
+    border-right: #001b35 solid 2px;
+    box-shadow: #1b1b1b 1px 1px 2px;
+  }
+  button, .btn {
+    cursor: pointer;
+  }
+  button {
+    background-color: $color-primary;
+  }
+
+  button {
+    width: 90%;
+    height: 22px;
+    margin-inline: 5%;
+    margin-block: 6px;
+  }
+  .button_light_switch {
+    visibility: hidden;
+  }
+  #calculate_button:focus + .button_light_switch {
+    visibility: visible;
+  }
+  
+  button:active {
+    border-top: #001b35 solid 2px;
+    border-left: #001b35 solid 2px;
+    border-bottom: #003e79 solid 2px;
+    border-right: #003e79 solid 2px;
+    font-size: 11.5px;
+    box-shadow: #363636 -1px -1px 5px;
+  }
+  button:hover,
+  .input_dim:hover {
+  filter: brightness(110%);
+  }
+  #btnControl {
+    display: none;
+  }
+  
+  #btnControl:checked + label > .image_switch {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s linear 0s, opacity 500ms;
+  }

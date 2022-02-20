@@ -1,0 +1,32 @@
+/*TEXTS size style weight text-shadow decoration cursor...*/
+@font-face {
+    font-family: iforces;
+    src: url("../fonts/iforces/iforces.ttf") format("truetype");
+  }
+  
+  @font-face {
+    font-family: Roboto;
+    src: url("../fonts/Roboto/Roboto-Regular.ttf") format("truetype");
+  }
+  
+  html, table, input {
+    font-size: 11px;
+    font-family: Roboto, iforces, Arial, Helvetica, sans-serif;
+  }
+  html, button, .input_dim input, a{
+    color: #fff5e8;
+    text-shadow: #1b1b1b 1px 1px 2px;
+  }
+  h1 {
+    font-size: 14px;
+    text-shadow: -1px -1px 0px rgb(36, 22, 2);
+  }
+  p, li {
+    font-size: 10px;
+    /* line-height: 2; */
+    /* letter-spacing: 1px; */
+  }
+  th, button {
+    font-size: 12px;
+  }
+ 
